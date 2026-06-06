@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Scan & Input Barang - Admin Gudang Mahawira</title>
+    <!-- Simple bar CSS -->
+    <link rel="stylesheet" href="css/simplebar.css">
+    <!-- Fonts CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!-- Icons CSS -->
+    <link rel="stylesheet" href="css/feather.css">
+    <link rel="stylesheet" href="css/select2.css">
+    <link rel="stylesheet" href="css/dropzone.css">
+    <link rel="stylesheet" href="css/uppy.min.css">
+    <link rel="stylesheet" href="css/jquery.steps.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/quill.snow.css">
+    <link rel="stylesheet" href="css/daterangepicker.css">
+    <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
+    <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
+    <!-- QuaggaJS untuk scan barcode -->
+    <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+    
+    <style>
+        .main-content { background: #f8f9fc; }
+        
+        .btn-add {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn-add:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(30,60,114,0.3); color: white; }
+        
+        .btn-scan-camera {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        .btn-scan-camera:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,152,0,0.3);
+            color: white;
+        }
+        
+        .btn-submit-scan {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: 13px;
+        }
+        .btn-submit-scan:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40,167,69,0.3);
+            color: white;
+        }
+        
+        .scan-box {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 2px dashed #cbd5e0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .scan-box:hover {
+            border-color: #2a5298;
+            background: #f8f9fc;
+        }
+        .scan-icon {
+            font-size: 48px;
+            color: #2a5298;
+            margin-bottom: 10px;
+        }
+        .scan-result-card {
+            background: white;
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            margin-top: 0;
+        }
+        .barcode-input {
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            padding: 10px 15px;
+            font-size: 14px;
+            width: 100%;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        .barcode-input:focus {
+            border-color: #2a5298;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(42,82,152,0.1);
+        }
+        
+        .info-barang {
+            background: #e8f5e9;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
+            border-left: 3px solid #4caf50;
+        }
+        .info-not-found {
+            background: #ffebee;
+            border-left: 3px solid #f44336;
+        }
+        
+        .form-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .form-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        /* Modal Camera Scanner - UKURAN KECIL */
+        .modal-scanner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-scanner.active {
+            display: flex;
+        }
+        .scanner-container {
+            background: white;
+            border-radius: 16px;
+            width: 340px;
+            max-width: 90%;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .scanner-header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .scanner-header h5 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .close-scanner {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .video-container {
+            position: relative;
+            background: #000;
+            height: 240px;
+            overflow: hidden;
+        }
+        #interactive {
+            width: 100%;
+            height: 100%;
+        }
+        #interactive video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .scanner-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 80px;
+            border: 2px solid rgba(255,255,255,0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 0 9999px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+        .scanner-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #ff9800;
+            animation: scanMove 2s linear infinite;
+        }
+        @keyframes scanMove {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+        }
+        .scanner-info {
+            padding: 12px;
+            text-align: center;
+            background: #f8f9fc;
+        }
+        .scanner-info p {
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        .btn-cancel-scan {
+            background: #6c757d;
+            border: none;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .camera-selector {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        .camera-btn {
+            background: #e9ecef;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .camera-btn.active {
+            background: #2a5298;
+            color: white;
+        }
+        .camera-btn:hover {
+            background: #1e3c72;
+            color: white;
+        }
+        
+        .table th { border-top: none; font-weight: 600; color: #1e3c72; }
+        .card { border-radius: 12px; border: none; }
+        h2 { font-size: 1.6rem; color: #1e3c72; }
+        
+        @keyframes scanPulse {
+            0% { box-shadow: 0 0 0 0 rgba(42,82,152,0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(42,82,152,0); }
+            100% { box-shadow: 0 0 0 0 rgba(42,82,152,0); }
+        }
+        .scan-active {
+            animation: scanPulse 1.5s infinite;
+            border-color: #2a5298 !important;
+            background: #f0f4fa !important;
+        }
+        
+        @media (max-width: 768px) {
+            .table-responsive { overflow-x: auto; }
+            .scan-box { padding: 15px; }
+            .scan-icon { font-size: 40px; }
+            h2 { font-size: 1.3rem; }
+            .scanner-container { width: 320px; }
+            .video-container { height: 220px; }
+            .scanner-overlay { width: 180px; height: 70px; }
+        }
+    </style>
+</head>
+<body class="vertical light">
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="topnav navbar navbar-light bg-white">
+        <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar">
+            <i class="fe fe-menu navbar-toggler-icon"></i>
+        </button>
+        <form class="form-inline mr-auto searchform text-muted">
+            <input class="form-control mr-sm-2 bg-transparent border-0 pl-4 text-muted" type="search" placeholder="Type something...">
+        </form>
+        <ul class="nav">
+            <li class="nav-item"><a class="nav-link text-muted my-2" href="#" id="modeSwitcher" data-mode="light"><i class="fe fe-sun fe-16"></i></a></li>
+            <li class="nav-item"><a class="nav-link text-muted my-2" href="./#" data-toggle="modal" data-target=".modal-shortcut"><span class="fe fe-grid fe-16"></span></a></li>
+            <li class="nav-item nav-notif"><a class="nav-link text-muted my-2" href="./#" data-toggle="modal" data-target=".modal-notif"><span class="fe fe-bell fe-16"></span><span class="dot dot-md bg-success"></span></a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown">
+                    <span class="avatar avatar-sm mt-2"><img src="./assets/avatars/face-1.jpg" alt="..." class="avatar-img rounded-circle"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#">Profile</a><a class="dropdown-item" href="#">Settings</a><a class="dropdown-item" href="#">Activities</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar-left border-right bg-white shadow" id="leftSidebar" data-simplebar>
+        <a href="#" class="btn collapseSidebar toggle-btn d-lg-none text-muted ml-2 mt-3" data-toggle="toggle"><i class="fe fe-x"></i></a>
+        <nav class="vertnav navbar navbar-light">
+            <div class="w-100 mb-4 d-flex"><a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="./index.html"><img id="logo" class="navbar-brand-img brand-sm" src="assets/images/logo_mahawira.png" alt="Logo"></a></div>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item dropdown">
+                    <a href="#dashboard" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-home fe-16"></i><span class="ml-3 item-text">Dashboard</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="dashboard">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-analytics.html"><span class="ml-1 item-text">Analytics</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./data_barang.html"><span class="ml-1 item-text">Data Barang</span></a></li>
+                        <li class="nav-item active"><a class="nav-link pl-3" href="./scan_barang.html"><span class="ml-1 item-text">Scan & Input Barang</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./pengajuan_pembelian.html"><span class="ml-1 item-text">Pengajuan Pembelian</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-saas.html"><span class="ml-1 item-text">Saas Dashboard</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="text-muted nav-heading mt-4 mb-1"><span>Components</span></p>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item dropdown"><a href="#ui-elements" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-box fe-16"></i><span class="ml-3 item-text">UI elements</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="ui-elements">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-color.html"><span class="ml-1 item-text">Colors</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-typograpy.html"><span class="ml-1 item-text">Typograpy</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-icons.html"><span class="ml-1 item-text">Icons</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-buttons.html"><span class="ml-1 item-text">Buttons</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-notification.html"><span class="ml-1 item-text">Notifications</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-modals.html"><span class="ml-1 item-text">Modals</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-tabs-accordion.html"><span class="ml-1 item-text">Tabs & Accordion</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-progress.html"><span class="ml-1 item-text">Progress</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item w-100"><a class="nav-link" href="widgets.html"><i class="fe fe-layers fe-16"></i><span class="ml-3 item-text">Widgets</span><span class="badge badge-pill badge-primary">New</span></a></li>
+                <li class="nav-item dropdown"><a href="#forms" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-credit-card fe-16"></i><span class="ml-3 item-text">Forms</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="forms">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_elements.html"><span class="ml-1 item-text">Basic Elements</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_advanced.html"><span class="ml-1 item-text">Advanced Elements</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_validation.html"><span class="ml-1 item-text">Validation</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_wizard.html"><span class="ml-1 item-text">Wizard</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_layouts.html"><span class="ml-1 item-text">Layouts</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_upload.html"><span class="ml-1 item-text">File upload</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#tables" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-grid fe-16"></i><span class="ml-3 item-text">Tables</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="tables">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./table_basic.html"><span class="ml-1 item-text">Basic Tables</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./table_advanced.html"><span class="ml-1 item-text">Advanced Tables</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./table_datatables.html"><span class="ml-1 item-text">Data Tables</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#charts" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-pie-chart fe-16"></i><span class="ml-3 item-text">Charts</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="charts">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./chart-inline.html"><span class="ml-1 item-text">Inline Chart</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./chart-chartjs.html"><span class="ml-1 item-text">Chartjs</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./chart-apexcharts.html"><span class="ml-1 item-text">ApexCharts</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./datamaps.html"><span class="ml-1 item-text">Datamaps</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="text-muted nav-heading mt-4 mb-1"><span>Apps</span></p>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item w-100"><a class="nav-link" href="calendar.html"><i class="fe fe-calendar fe-16"></i><span class="ml-3 item-text">Calendar</span></a></li>
+                <li class="nav-item dropdown"><a href="#contact" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-book fe-16"></i><span class="ml-3 item-text">Contacts</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="contact">
+                        <a class="nav-link pl-3" href="./contacts-list.html"><span class="ml-1">Contact List</span></a>
+                        <a class="nav-link pl-3" href="./contacts-grid.html"><span class="ml-1">Contact Grid</span></a>
+                        <a class="nav-link pl-3" href="./contacts-new.html"><span class="ml-1">New Contact</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#profile" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-user fe-16"></i><span class="ml-3 item-text">Profile</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="profile">
+                        <a class="nav-link pl-3" href="./profile.html"><span class="ml-1">Overview</span></a>
+                        <a class="nav-link pl-3" href="./profile-settings.html"><span class="ml-1">Settings</span></a>
+                        <a class="nav-link pl-3" href="./profile-security.html"><span class="ml-1">Security</span></a>
+                        <a class="nav-link pl-3" href="./profile-notification.html"><span class="ml-1">Notifications</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#fileman" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-folder fe-16"></i><span class="ml-3 item-text">File Manager</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="fileman">
+                        <a class="nav-link pl-3" href="./files-list.html"><span class="ml-1">Files List</span></a>
+                        <a class="nav-link pl-3" href="./files-grid.html"><span class="ml-1">Files Grid</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#support" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-compass fe-16"></i><span class="ml-3 item-text">Help Desk</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="support">
+                        <a class="nav-link pl-3" href="./support-center.html"><span class="ml-1">Home</span></a>
+                        <a class="nav-link pl-3" href="./support-tickets.html"><span class="ml-1">Tickets</span></a>
+                        <a class="nav-link pl-3" href="./support-ticket-detail.html"><span class="ml-1">Ticket Detail</span></a>
+                        <a class="nav-link pl-3" href="./support-faqs.html"><span class="ml-1">FAQs</span></a>
+                    </ul>
+                </li>
+            </ul>
+            <p class="text-muted nav-heading mt-4 mb-1"><span>Extra</span></p>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item dropdown"><a href="#pages" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-file fe-16"></i><span class="ml-3 item-text">Pages</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="pages">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-orders.html"><span class="ml-1 item-text">Orders</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-timeline.html"><span class="ml-1 item-text">Timeline</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-invoice.html"><span class="ml-1 item-text">Invoice</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-404.html"><span class="ml-1 item-text">Page 404</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-500.html"><span class="ml-1 item-text">Page 500</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-blank.html"><span class="ml-1 item-text">Blank</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#auth" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-shield fe-16"></i><span class="ml-3 item-text">Authentication</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="auth">
+                        <a class="nav-link pl-3" href="./auth-login.html"><span class="ml-1">Login 1</span></a>
+                        <a class="nav-link pl-3" href="./auth-login-half.html"><span class="ml-1">Login 2</span></a>
+                        <a class="nav-link pl-3" href="./auth-register.html"><span class="ml-1">Register</span></a>
+                        <a class="nav-link pl-3" href="./auth-resetpw.html"><span class="ml-1">Reset Password</span></a>
+                        <a class="nav-link pl-3" href="./auth-confirm.html"><span class="ml-1">Confirm Password</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#layouts" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-layout fe-16"></i><span class="ml-3 item-text">Layout</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="layouts">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index-horizontal.html"><span class="ml-1 item-text">Top Navigation</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index-boxed.html"><span class="ml-1 item-text">Boxed</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <!-- MODAL SCANNER KAMERA - UKURAN KECIL -->
+    <div class="modal-scanner" id="scannerModal">
+        <div class="scanner-container">
+            <div class="scanner-header">
+                <h5><i class="fe fe-camera mr-1"></i> Scan Barcode</h5>
+                <button class="close-scanner" id="closeScannerBtn">&times;</button>
+            </div>
+            <div class="video-container">
+                <div id="interactive" class="viewport"></div>
+                <div class="scanner-overlay">
+                    <div class="scanner-line"></div>
+                </div>
+            </div>
+            <div class="scanner-info">
+                <p>Arahkan kamera ke barcode barang</p>
+                <div class="camera-selector">
+                    <button class="camera-btn active" id="cameraRearBtn">📷 Belakang</button>
+                    <button class="camera-btn" id="cameraFrontBtn">🤳 Depan</button>
+                </div>
+                <button class="btn-cancel-scan" id="cancelScanBtn">Batalkan</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MAIN CONTENT -->
+    <main role="main" class="main-content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="row align-items-center my-3">
+                        <div class="col">
+                            <h2 class="mb-0" style="color: #1e3c72;">Scan & Input Barang</h2>
+                            <p class="text-muted small">Scan barcode barang untuk menambah stok atau input barang baru</p>
+                        </div>
+                        <div class="col-auto">
+                            <a href="data_barang.html" class="btn btn-add btn-sm">
+                                <i class="fe fe-arrow-left fe-12 mr-1"></i>Ke Data Barang
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card shadow-sm border-0" style="border-radius: 16px;">
+                                <div class="card-body p-3 p-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="scan-box" id="scanBox">
+                                                <div class="scan-icon"><i class="fe fe-camera"></i></div>
+                                                <h5 class="mb-1">Scan Barcode Barang</h5>
+                                                <p class="text-muted small">Arahkan kamera ke barcode atau masukkan kode secara manual</p>
+                                                <div class="mt-2">
+                                                    <input type="text" class="barcode-input" id="barcodeInput" placeholder="Masukkan kode barcode..." autofocus>
+                                                    <small class="text-muted d-block mt-1">Tekan Enter setelah memasukkan kode</small>
+                                                </div>
+                                                <button class="btn-scan-camera" id="openCameraBtn">
+                                                    <i class="fe fe-camera fe-12 mr-1"></i> Buka Kamera
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="scan-result-card" id="scanResult">
+                                                <div class="text-center py-3">
+                                                    <i class="fe fe-info" style="font-size: 36px; color: #cbd5e0;"></i>
+                                                    <p class="text-muted mt-1 small">Belum ada scan</p>
+                                                    <p class="text-muted small">Silakan scan atau masukkan kode barang</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section" id="formSection" style="display: none;">
+                        <div class="form-title"><i class="fe fe-edit-2 mr-1"></i> Input Data Barang Baru</div>
+                        <form id="formInputBarang">
+                            <div class="row">
+                                <div class="col-md-4"><div class="form-group"><label class="small">Kode Barang</label><input type="text" class="form-control form-control-sm" id="inputKode" placeholder="Otomatis" readonly style="background:#f8f9fc;"></div></div>
+                                <div class="col-md-4"><div class="form-group"><label class="small">Barcode</label><input type="text" class="form-control form-control-sm" id="inputBarcode" placeholder="Kode barcode" readonly style="background:#f8f9fc;"></div></div>
+                                <div class="col-md-4"><div class="form-group"><label class="small">Nama Barang</label><input type="text" class="form-control form-control-sm" id="inputNama" placeholder="Nama barang"></div></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4"><div class="form-group"><label class="small">Kategori</label><select class="form-control form-control-sm" id="inputKategori"><option>Elektronik</option><option>Aksesoris</option><option>Komputer</option><option>Storage</option><option>Audio</option></select></div></div>
+                                <div class="col-md-4"><div class="form-group"><label class="small">Satuan</label><select class="form-control form-control-sm" id="inputSatuan"><option>Pcs</option><option>Unit</option><option>Box</option><option>Paket</option></select></div></div>
+                                <div class="col-md-4"><div class="form-group"><label class="small">Supplier</label><select class="form-control form-control-sm" id="inputSupplier"><option>PT Elektronik Jaya</option><option>PT Logitech Indonesia</option><option>PT Razer Indonesia</option><option>PT Samsung Electronics</option><option>PT Western Digital</option><option>PT Corsair</option><option>PT JBL Indonesia</option></select></div></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3"><div class="form-group"><label class="small">Harga Beli</label><input type="text" class="form-control form-control-sm" id="inputHargaBeli" placeholder="Rp"></div></div>
+                                <div class="col-md-3"><div class="form-group"><label class="small">Harga Jual</label><input type="text" class="form-control form-control-sm" id="inputHargaJual" placeholder="Rp"></div></div>
+                                <div class="col-md-3"><div class="form-group"><label class="small">Stok Awal</label><input type="number" class="form-control form-control-sm" id="inputStok" placeholder="Jumlah" value="1"></div></div>
+                                <div class="col-md-3"><div class="form-group"><label class="small">Lokasi Rak</label><input type="text" class="form-control form-control-sm" id="inputLokasiRak" placeholder="Rak - Baris - Kolom"></div></div>
+                            </div>
+                            <div class="form-group"><label class="small">Deskripsi</label><textarea class="form-control form-control-sm" rows="2" id="inputDeskripsi" placeholder="Deskripsi barang"></textarea></div>
+                            <div class="text-right">
+                                <button type="button" class="btn btn-secondary btn-sm mr-1" id="resetFormBtn">Reset</button>
+                                <button type="button" class="btn btn-submit-scan" id="simpanBarangScanBtn"><i class="fe fe-save fe-12 mr-1"></i> Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="card shadow-sm border-0 mt-3">
+                        <div class="card-header bg-white border-0 pt-3 pb-0"><h5 class="mb-0 small" style="color: #1e3c72;"><i class="fe fe-clock fe-14 mr-1"></i>Riwayat Scan</h5></div>
+                        <div class="card-body p-3">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-sm mb-0">
+                                    <thead><tr><th class="small">Waktu Scan</th><th class="small">Kode Barcode</th><th class="small">Status</th><th class="small">Keterangan</th></tr></thead>
+                                    <tbody id="riwayatScanBody"><tr><td colspan="4" class="text-center text-muted small">Belum ada riwayat scan</td></tr></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal fade modal-notif modal-slide" tabindex="-1"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><h5>Notifications</h5><button type="button" class="close" data-dismiss="modal">×</button></div><div class="modal-body"><div class="list-group"><div class="list-group-item"><div class="row"><div class="col-auto"><span class="fe fe-box fe-24"></span></div><div class="col"><small><strong>Stok barang menipis</strong></small></div></div></div></div></div><div class="modal-footer"><button class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button></div></div></div></div>
+        <div class="modal fade modal-shortcut modal-slide" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5>Shortcuts</h5><button type="button" class="close" data-dismiss="modal">×</button></div><div class="modal-body px-5"><div class="row"><div class="col-6 text-center"><div class="squircle bg-success"><i class="fe fe-box fe-32 text-white"></i></div><p>Data Barang</p></div><div class="col-6 text-center"><div class="squircle bg-primary"><i class="fe fe-arrow-down fe-32 text-white"></i></div><p>Barang Masuk</p></div></div></div></div></div></div>
+    </main>
+</div>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/simplebar.min.js"></script>
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap4.min.js"></script>
+<script src="js/apps.js"></script>
+
+<script>
+$(document).ready(function() {
+    // ==================== AMBIL DATA DARI LOCALSTORAGE ====================
+    let gudangItems = JSON.parse(localStorage.getItem('gudangItems') || '[]');
+    
+    if (gudangItems.length === 0) {
+        gudangItems = [
+            { kode: "BRG-001", barcode: "8901234567890", nama: "Kabel HDMI 2m", kategori: "Aksesoris", hargaBeli: 25000, hargaJual: 35000, stok: 150, satuan: "Pcs", supplier: "PT Elektronik Jaya", lokasiRak: "A-01-01", deskripsi: "Kabel HDMI 2 meter" },
+            { kode: "BRG-002", barcode: "8901234567891", nama: "Mouse Wireless Logitech", kategori: "Elektronik", hargaBeli: 120000, hargaJual: 150000, stok: 75, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "B-02-03", deskripsi: "Mouse wireless" },
+            { kode: "BRG-003", barcode: "8901234567892", nama: "Keyboard Mechanical", kategori: "Elektronik", hargaBeli: 350000, hargaJual: 450000, stok: 10, satuan: "Pcs", supplier: "PT Razer Indonesia", lokasiRak: "B-02-05", deskripsi: "Keyboard mechanical RGB" },
+            { kode: "BRG-004", barcode: "8901234567893", nama: "Monitor 24 Inch", kategori: "Elektronik", hargaBeli: 1200000, hargaJual: 1500000, stok: 45, satuan: "Unit", supplier: "PT Samsung Electronics", lokasiRak: "C-03-01", deskripsi: "Monitor LED" },
+            { kode: "BRG-005", barcode: "8901234567894", nama: "SSD 512GB", kategori: "Storage", hargaBeli: 850000, hargaJual: 1000000, stok: 0, satuan: "Pcs", supplier: "PT Western Digital", lokasiRak: "D-04-02", deskripsi: "SSD NVMe 512GB" }
+        ];
+        localStorage.setItem('gudangItems', JSON.stringify(gudangItems));
+    }
+    
+    function simpanKeLocalStorage() {
+        localStorage.setItem('gudangItems', JSON.stringify(gudangItems));
+    }
+    
+    let riwayatScan = [];
+    let currentCameraMode = "environment";
+    let scannerActive = false;
+    
+    function animateScan() {
+        $('#scanBox').addClass('scan-active');
+        setTimeout(() => { $('#scanBox').removeClass('scan-active'); }, 1000);
+    }
+    
+    function updateRiwayatScan() {
+        if (riwayatScan.length === 0) {
+            $('#riwayatScanBody').html('<tr><td colspan="4" class="text-center text-muted small">Belum ada riwayat scan</td></tr>');
+            return;
+        }
+        let html = '';
+        riwayatScan.forEach(item => {
+            let statusClass = item.status === 'Ditemukan' ? 'text-success' : 'text-warning';
+            html += `<tr>
+                        <td><small>${item.waktu}</small></td>
+                        <td><code class="small">${item.barcode}</code></td>
+                        <td class="${statusClass} small">${item.status}</td>
+                        <td class="small">${item.keterangan}</td>
+                      </tr>`;
+        });
+        $('#riwayatScanBody').html(html);
+    }
+    
+    function processScanResult(barcode) {
+        if (!barcode || barcode.trim() === "") return;
+        animateScan();
+        
+        let found = gudangItems.find(item => item.barcode === barcode);
+        let now = new Date();
+        let waktu = now.toLocaleString('id-ID');
+        let riwayat = { waktu: waktu, barcode: barcode, status: found ? "Ditemukan" : "Barang Baru", keterangan: found ? `Barang ${found.nama} ditemukan` : "Silakan input data barang baru" };
+        riwayatScan.unshift(riwayat);
+        if (riwayatScan.length > 10) riwayatScan.pop();
+        updateRiwayatScan();
+        
+        if (found) {
+            $('#scanResult').html(`
+                <div class="info-barang">
+                    <div class="d-flex align-items-center mb-2"><i class="fe fe-check-circle text-success" style="font-size: 18px;"></i><h6 class="mb-0 ml-2 text-success small">Barang Ditemukan!</h6></div>
+                    <div class="row small">
+                        <div class="col-6"><small>Kode</small><div class="fw-bold">${found.kode}</div></div>
+                        <div class="col-6"><small>Nama</small><div class="fw-bold">${found.nama}</div></div>
+                        <div class="col-6 mt-1"><small>Stok</small><div class="fw-bold">${found.stok} ${found.satuan}</div></div>
+                        <div class="col-6 mt-1"><small>Harga Jual</small><div>Rp ${found.hargaJual.toLocaleString('id-ID')}</div></div>
+                    </div>
+                    <div class="mt-2">
+                        <label class="small fw-bold">Tambah stok:</label>
+                        <input type="number" id="tambahStokJumlah" class="form-control form-control-sm d-inline-block" style="width: 80px;" value="1" min="1">
+                        <button class="btn btn-sm btn-success ms-1" id="tambahStokBtn"><i class="fe fe-plus fe-10"></i> Tambah</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" id="scanLagiBtn"><i class="fe fe-camera fe-10"></i> Scan Lagi</button>
+                    </div>
+                </div>
+            `);
+            $('#formSection').hide();
+            
+            $(document).off('click', '#tambahStokBtn').on('click', '#tambahStokBtn', function() {
+                let tambahStok = parseInt($('#tambahStokJumlah').val()) || 1;
+                let index = gudangItems.findIndex(item => item.barcode === barcode);
+                if (index !== -1) {
+                    gudangItems[index].stok += tambahStok;
+                    simpanKeLocalStorage();
+                    let newStok = gudangItems[index].stok;
+                    alert(`✅ Stok ${found.nama} +${tambahStok} pcs!\nStok sekarang: ${newStok} ${found.satuan}`);
+                    $('#scanResult').html(`<div class="text-center py-3"><i class="fe fe-check-circle" style="font-size: 36px; color: #4caf50;"></i><p class="text-success mt-1 small">Stok berhasil ditambahkan! +${tambahStok}</p><p class="text-muted small">Stok sekarang: ${newStok} ${found.satuan}</p></div>`);
+                    setTimeout(() => {
+                        $('#scanResult').html(`<div class="text-center py-3"><i class="fe fe-info" style="font-size: 36px; color: #cbd5e0;"></i><p class="text-muted mt-1 small">Siap scan barang berikutnya</p></div>`);
+                    }, 2000);
+                }
+            });
+            $(document).off('click', '#scanLagiBtn').on('click', '#scanLagiBtn', function() {
+                $('#barcodeInput').val('').focus();
+                $('#scanResult').html(`<div class="text-center py-3"><i class="fe fe-info" style="font-size: 36px; color: #cbd5e0;"></i><p class="text-muted mt-1 small">Siap scan barang</p></div>`);
+                $('#formSection').hide();
+            });
+        } else {
+            let newKode = 'BRG-' + String(gudangItems.length + 1).padStart(3, '0');
+            $('#scanResult').html(`<div class="info-barang info-not-found"><div class="d-flex align-items-center mb-1"><i class="fe fe-alert-triangle text-warning" style="font-size: 18px;"></i><h6 class="mb-0 ml-2 text-warning small">Barang Belum Terdaftar!</h6></div><p class="small mb-1">Barcode: <strong>${barcode}</strong></p><p class="small">Silakan isi form di bawah.</p></div>`);
+            $('#inputBarcode').val(barcode);
+            $('#inputKode').val(newKode);
+            $('#inputNama').val('');
+            $('#inputHargaBeli').val('');
+            $('#inputHargaJual').val('');
+            $('#inputStok').val(1);
+            $('#inputLokasiRak').val('');
+            $('#inputDeskripsi').val('');
+            $('#formSection').show();
+            $('html, body').animate({ scrollTop: $('#formSection').offset().top - 100 }, 500);
+        }
+    }
+    
+    $('#barcodeInput').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            let barcode = $(this).val().trim();
+            if (barcode) { processScanResult(barcode); $(this).val(''); }
+        }
+    });
+    
+    // ==================== FITUR KAMERA SCAN UKURAN KECIL ====================
+    let scannerModal = $('#scannerModal');
+    
+    function stopScanner() {
+        if (scannerActive) {
+            Quagga.stop();
+            scannerActive = false;
+        }
+    }
+    
+    function startScanner(cameraMode) {
+        stopScanner();
+        
+        let targetDevice = cameraMode === "environment" ? "environment" : "user";
+        
+        Quagga.init({
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: document.querySelector("#interactive"),
+                constraints: {
+                    facingMode: targetDevice,
+                    width: { ideal: 480 },
+                    height: { ideal: 360 }
+                }
+            },
+            decoder: {
+                readers: ["code_128_reader", "ean_reader", "ean_8_reader", "upc_reader", "code_39_reader"]
+            }
+        }, function(err) {
+            if (err) {
+                console.error("Quagga init error:", err);
+                alert("Tidak dapat mengakses kamera.");
+                scannerModal.removeClass('active');
+                return;
+            }
+            Quagga.start();
+            scannerActive = true;
+        });
+        
+        Quagga.onDetected(function(result) {
+            let code = result.codeResult.code;
+            if (code) {
+                stopScanner();
+                scannerModal.removeClass('active');
+                $('#barcodeInput').val(code);
+                processScanResult(code);
+                alert(`Barcode: ${code}`);
+            }
+        });
+    }
+    
+    function openScannerModal(cameraMode = "environment") {
+        currentCameraMode = cameraMode;
+        updateCameraButtonActive();
+        scannerModal.addClass('active');
+        setTimeout(() => {
+            startScanner(currentCameraMode);
+        }, 300);
+    }
+    
+    function updateCameraButtonActive() {
+        if (currentCameraMode === "environment") {
+            $('#cameraRearBtn').addClass('active');
+            $('#cameraFrontBtn').removeClass('active');
+        } else {
+            $('#cameraRearBtn').removeClass('active');
+            $('#cameraFrontBtn').addClass('active');
+        }
+    }
+    
+    function closeScannerModal() {
+        stopScanner();
+        scannerModal.removeClass('active');
+        let interactiveDiv = document.getElementById("interactive");
+        if (interactiveDiv) {
+            interactiveDiv.innerHTML = "";
+        }
+    }
+    
+    $('#openCameraBtn').click(() => openScannerModal("environment"));
+    
+    $('#cameraRearBtn').click(function() {
+        if (currentCameraMode !== "environment") {
+            currentCameraMode = "environment";
+            updateCameraButtonActive();
+            if (scannerModal.hasClass('active')) {
+                startScanner(currentCameraMode);
+            }
+        }
+    });
+    
+    $('#cameraFrontBtn').click(function() {
+        if (currentCameraMode !== "user") {
+            currentCameraMode = "user";
+            updateCameraButtonActive();
+            if (scannerModal.hasClass('active')) {
+                startScanner(currentCameraMode);
+            }
+        }
+    });
+    
+    $('#closeScannerBtn').click(closeScannerModal);
+    $('#cancelScanBtn').click(closeScannerModal);
+    
+    $(scannerModal).click(function(e) {
+        if ($(e.target).is(scannerModal)) {
+            closeScannerModal();
+        }
+    });
+    
+    // Simpan barang baru
+    $('#simpanBarangScanBtn').click(function() {
+        let barcode = $('#inputBarcode').val();
+        let kode = $('#inputKode').val();
+        let nama = $('#inputNama').val();
+        let kategori = $('#inputKategori').val();
+        let satuan = $('#inputSatuan').val();
+        let supplier = $('#inputSupplier').val();
+        let hargaBeliStr = $('#inputHargaBeli').val();
+        let hargaJualStr = $('#inputHargaJual').val();
+        let stok = parseInt($('#inputStok').val()) || 1;
+        let lokasiRak = $('#inputLokasiRak').val();
+        let deskripsi = $('#inputDeskripsi').val();
+        
+        if (!nama) { alert("Nama barang wajib diisi!"); $('#inputNama').focus(); return; }
+        
+        let hargaBeli = parseInt(hargaBeliStr.replace(/[^0-9]/g, '')) || 0;
+        let hargaJual = parseInt(hargaJualStr.replace(/[^0-9]/g, '')) || 0;
+        
+        let newBarang = { kode: kode, barcode: barcode, nama: nama, kategori: kategori, satuan: satuan, supplier: supplier, hargaBeli: hargaBeli, hargaJual: hargaJual, stok: stok, lokasiRak: lokasiRak, deskripsi: deskripsi };
+        gudangItems.push(newBarang);
+        simpanKeLocalStorage();
+        
+        alert(`✅ Barang "${nama}" (${kode}) berhasil ditambahkan! Stok: ${stok} ${satuan}`);
+        
+        $('#formSection').hide();
+        $('#inputBarcode').val(''); $('#inputKode').val(''); $('#inputNama').val(''); $('#inputHargaBeli').val(''); $('#inputHargaJual').val(''); $('#inputStok').val(1); $('#inputLokasiRak').val(''); $('#inputDeskripsi').val('');
+        $('#scanResult').html(`<div class="text-center py-3"><i class="fe fe-check-circle" style="font-size: 36px; color: #4caf50;"></i><p class="text-success mt-1 small">Barang berhasil didaftarkan!</p><p class="text-muted small">${nama} (${kode})</p></div>`);
+        setTimeout(() => {
+            $('#scanResult').html(`<div class="text-center py-3"><i class="fe fe-info" style="font-size: 36px; color: #cbd5e0;"></i><p class="text-muted mt-1 small">Siap scan barang berikutnya</p></div>`);
+        }, 2000);
+        $('#barcodeInput').val('').focus();
+    });
+    
+    $('#resetFormBtn').click(function() {
+        $('#inputKode').val(''); $('#inputNama').val(''); $('#inputHargaBeli').val(''); $('#inputHargaJual').val(''); $('#inputStok').val(1); $('#inputLokasiRak').val(''); $('#inputDeskripsi').val('');
+        $('#formSection').hide();
+        $('#scanResult').html(`<div class="text-center py-3"><i class="fe fe-info" style="font-size: 36px; color: #cbd5e0;"></i><p class="text-muted mt-1 small">Scan dibatalkan</p><p class="text-muted small">Silakan scan barcode lagi</p></div>`);
+        $('#barcodeInput').val('').focus();
+    });
+    
+    $('#scanBox').click(function() { $('#barcodeInput').focus(); });
+});
+</script>
+</body>
+</html>

@@ -60,14 +60,12 @@
         .section-title-modal { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: #1e3c72; border-left: 4px solid #2a5298; padding-left: 12px; }
         .list-barang-scroll { max-height: 350px; overflow-y: auto; padding-right: 5px; }
         
-        /* Badge Role */
         .badge-role-admin { background: #1e3c72; color: white; padding: 2px 8px; border-radius: 20px; font-size: 10px; }
         .badge-role-teknis { background: #ff9800; color: white; padding: 2px 8px; border-radius: 20px; font-size: 10px; }
         
         .fade-out-row { animation: fadeOut 0.4s ease-out forwards; }
         @keyframes fadeOut { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; transform: translateX(-20px); display: none; } }
         
-        /* Radio Button Custom */
         .role-radio-group {
             display: flex;
             gap: 20px;
@@ -158,6 +156,7 @@
                         <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-analytics.html"><span class="ml-1 item-text">Analytics</span></a></li>
                         <li class="nav-item"><a class="nav-link pl-3" href="./data_barang.html"><span class="ml-1 item-text">Data Barang</span></a></li>
                         <li class="nav-item"><a class="nav-link pl-3" href="./pengajuan_pembelian.html"><span class="ml-1 item-text">Pengajuan Pembelian</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./scan_barang.html"><span class="ml-1 item-text">Input & Scan Barang</span></a></li>
                         <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-saas.html"><span class="ml-1 item-text">Saas Dashboard</span></a></li>
                         <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-system.html"><span class="ml-1 item-text">Systems</span></a></li>
                     </ul>
@@ -281,10 +280,10 @@
                     
                     <!-- Statistics Cards -->
                     <div class="row mb-4">
-                        <div class="col-md-3 mb-3"><div class="card shadow-sm border-0"><div class="card-body"><div class="row align-items-center"><div class="col-3 text-center"><div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center" style="background: rgba(30,60,114,0.1); width: 48px; height: 48px;"><i class="fe fe-package fe-24 text-primary"></i></div></div><div class="col"><p class="small text-muted mb-0">Total Barang</p><span class="h3 mb-0" id="totalBarangCount">8</span></div></div></div></div></div>
-                        <div class="col-md-3 mb-3"><div class="card shadow-sm border-0"><div class="card-body"><div class="row align-items-center"><div class="col-3 text-center"><div class="rounded-circle bg-success bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center" style="background: rgba(46,125,50,0.1); width: 48px; height: 48px;"><i class="fe fe-check-circle fe-24 text-success"></i></div></div><div class="col"><p class="small text-muted mb-0">Stok Tersedia</p><span class="h3 mb-0" id="stokTersediaCount">468</span></div></div></div></div></div>
-                        <div class="col-md-3 mb-3"><div class="card shadow-sm border-0"><div class="card-body"><div class="row align-items-center"><div class="col-3 text-center"><div class="rounded-circle bg-warning bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center" style="background: rgba(245,124,0,0.1); width: 48px; height: 48px;"><i class="fe fe-alert-triangle fe-24 text-warning"></i></div></div><div class="col"><p class="small text-muted mb-0">Stok Menipis</p><span class="h3 mb-0" id="stokMenipisCount">2</span></div></div></div></div></div>
-                        <div class="col-md-3 mb-3"><div class="card shadow-sm border-0"><div class="card-body"><div class="row align-items-center"><div class="col-3 text-center"><div class="rounded-circle bg-danger bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center" style="background: rgba(198,40,40,0.1); width: 48px; height: 48px;"><i class="fe fe-x-circle fe-24 text-danger"></i></div></div><div class="col"><p class="small text-muted mb-0">Stok Habis</p><span class="h3 mb-0" id="stokHabisCount">1</span></div></div></div></div></div>
+                        <div class="col-md-3 mb-3"><div class="card shadow-sm border-0"><div class="card-body"><div class="row align-items-center"><div class="col-3 text-center"><div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center" style="background: rgba(30,60,114,0.1); width: 48px; height: 48px;"><i class="fe fe-package fe-24 text-primary"></i></div></div><div class="col"><p class="small text-muted mb-0">Total Barang</p><span class="h3 mb-0" id="totalBarangCount">0</span></div></div></div></div></div>
+                        <div class="col-md-3 mb-3"><div class="card shadow-sm border-0"><div class="card-body"><div class="row align-items-center"><div class="col-3 text-center"><div class="rounded-circle bg-success bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center" style="background: rgba(46,125,50,0.1); width: 48px; height: 48px;"><i class="fe fe-check-circle fe-24 text-success"></i></div></div><div class="col"><p class="small text-muted mb-0">Stok Tersedia</p><span class="h3 mb-0" id="stokTersediaCount">0</span></div></div></div></div></div>
+                        <div class="col-md-3 mb-3"><div class="card shadow-sm border-0"><div class="card-body"><div class="row align-items-center"><div class="col-3 text-center"><div class="rounded-circle bg-warning bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center" style="background: rgba(245,124,0,0.1); width: 48px; height: 48px;"><i class="fe fe-alert-triangle fe-24 text-warning"></i></div></div><div class="col"><p class="small text-muted mb-0">Stok Menipis</p><span class="h3 mb-0" id="stokMenipisCount">0</span></div></div></div></div></div>
+                        <div class="col-md-3 mb-3"><div class="card shadow-sm border-0"><div class="card-body"><div class="row align-items-center"><div class="col-3 text-center"><div class="rounded-circle bg-danger bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center" style="background: rgba(198,40,40,0.1); width: 48px; height: 48px;"><i class="fe fe-x-circle fe-24 text-danger"></i></div></div><div class="col"><p class="small text-muted mb-0">Stok Habis</p><span class="h3 mb-0" id="stokHabisCount">0</span></div></div></div></div></div>
                     </div>
                     
                     <!-- Data Table -->
@@ -358,7 +357,7 @@
             </div>
         </div>
         
-        <!-- MODAL PENGAJUAN PEMBELIAN (DENGAN ROLE ADMIN & TEKNIS) -->
+        <!-- MODAL PENGAJUAN PEMBELIAN -->
         <div class="modal fade" id="modalPengadaanBarang" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-md modal-dialog-centered">
                 <div class="modal-content">
@@ -375,23 +374,16 @@
                             </div>
                         </div>
                         
-                        <!-- Pilihan Role Pengaju -->
                         <div class="form-group">
                             <label><i class="fe fe-user fe-12"></i> Diajukan Oleh</label>
                             <div class="role-radio-group">
-                                <div class="role-radio" onclick="selectRole('Admin')">
+                                <div class="role-radio" id="roleAdminBox">
                                     <input type="radio" name="rolePengaju" id="roleAdmin" value="Admin" checked>
-                                    <div>
-                                        <label for="roleAdmin">👑 Admin</label>
-                                        <small>Manajer / Administrator</small>
-                                    </div>
+                                    <div><label for="roleAdmin">👑 Admin</label><small>Manajer / Administrator</small></div>
                                 </div>
-                                <div class="role-radio" onclick="selectRole('Teknis')">
+                                <div class="role-radio" id="roleTeknisBox">
                                     <input type="radio" name="rolePengaju" id="roleTeknis" value="Teknis">
-                                    <div>
-                                        <label for="roleTeknis">🔧 Teknis / Staff</label>
-                                        <small>Staff gudang / operator</small>
-                                    </div>
+                                    <div><label for="roleTeknis">🔧 Teknis / Staff</label><small>Staff gudang / operator</small></div>
                                 </div>
                             </div>
                         </div>
@@ -520,16 +512,55 @@
 $(document).ready(function() {
     if($.fn.DataTable) $('#dataTable').DataTable({ paging: false, info: false, searching: false, lengthChange: false });
     
+    // ==================== AMBIL DATA DARI LOCALSTORAGE ====================
+    let gudangItems = JSON.parse(localStorage.getItem('gudangItems') || '[]');
+    
+    // Jika localStorage kosong, gunakan data dummy
+    if (gudangItems.length === 0) {
+        gudangItems = [
+            { kode: "BRG-001", barcode: "8901234567890", nama: "Kabel HDMI 2m", kategori: "Aksesoris", hargaBeli: 25000, hargaJual: 35000, stok: 150, satuan: "Pcs", supplier: "PT Elektronik Jaya", lokasiRak: "A-01-01", deskripsi: "Kabel HDMI 2 meter" },
+            { kode: "BRG-002", barcode: "8901234567891", nama: "Mouse Wireless Logitech", kategori: "Elektronik", hargaBeli: 120000, hargaJual: 150000, stok: 75, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "B-02-03", deskripsi: "Mouse wireless" },
+            { kode: "BRG-003", barcode: "8901234567892", nama: "Keyboard Mechanical", kategori: "Elektronik", hargaBeli: 350000, hargaJual: 450000, stok: 10, satuan: "Pcs", supplier: "PT Razer Indonesia", lokasiRak: "B-02-05", deskripsi: "Keyboard mechanical RGB" },
+            { kode: "BRG-004", barcode: "8901234567893", nama: "Monitor 24 Inch", kategori: "Elektronik", hargaBeli: 1200000, hargaJual: 1500000, stok: 45, satuan: "Unit", supplier: "PT Samsung Electronics", lokasiRak: "C-03-01", deskripsi: "Monitor LED" },
+            { kode: "BRG-005", barcode: "8901234567894", nama: "SSD 512GB", kategori: "Storage", hargaBeli: 850000, hargaJual: 1000000, stok: 0, satuan: "Pcs", supplier: "PT Western Digital", lokasiRak: "D-04-02", deskripsi: "SSD NVMe 512GB" },
+            { kode: "BRG-006", barcode: "8901234567895", nama: "RAM 8GB DDR4", kategori: "Komputer", hargaBeli: 450000, hargaJual: 550000, stok: 120, satuan: "Pcs", supplier: "PT Corsair", lokasiRak: "D-04-04", deskripsi: "RAM DDR4" },
+            { kode: "BRG-007", barcode: "8901234567896", nama: "Webcam HD 1080p", kategori: "Aksesoris", hargaBeli: 180000, hargaJual: 250000, stok: 8, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "A-01-08", deskripsi: "Webcam HD" },
+            { kode: "BRG-008", barcode: "8901234567897", nama: "Speaker Bluetooth", kategori: "Audio", hargaBeli: 200000, hargaJual: 280000, stok: 60, satuan: "Pcs", supplier: "PT JBL Indonesia", lokasiRak: "E-05-01", deskripsi: "Speaker portable" }
+        ];
+        localStorage.setItem('gudangItems', JSON.stringify(gudangItems));
+    }
+    
+    // Fungsi untuk menyimpan data ke localStorage
+    function simpanGudangItems() {
+        localStorage.setItem('gudangItems', JSON.stringify(gudangItems));
+        // Update statistik setelah simpan
+        updateStatistics();
+    }
+    
+    // Fungsi update statistik
+    function updateStatistics() {
+        let totalStok = 0, stokMenipis = 0, stokHabis = 0;
+        gudangItems.forEach(item => {
+            if(item.stok === 0) stokHabis++;
+            else if(item.stok < 15) stokMenipis++;
+            totalStok += item.stok;
+        });
+        $('#totalBarangCount').text(gudangItems.length);
+        $('#stokTersediaCount').text(totalStok);
+        $('#stokMenipisCount').text(stokMenipis);
+        $('#stokHabisCount').text(stokHabis);
+    }
+    
     // Function untuk select role
     window.selectRole = function(role) {
         if(role === 'Admin') {
             $('#roleAdmin').prop('checked', true);
             $('.role-radio').removeClass('selected');
-            $('.role-radio:first').addClass('selected');
+            $('#roleAdminBox').addClass('selected');
         } else {
             $('#roleTeknis').prop('checked', true);
             $('.role-radio').removeClass('selected');
-            $('.role-radio:last').addClass('selected');
+            $('#roleTeknisBox').addClass('selected');
         }
     }
     
@@ -539,18 +570,6 @@ $(document).ready(function() {
         $('.role-radio').removeClass('selected');
         $(this).addClass('selected');
     });
-    
-    // DATA DUMMY GUDANG
-    let gudangItems = [
-        { kode: "BRG-001", nama: "Kabel HDMI 2m", kategori: "Aksesoris", hargaBeli: 25000, hargaJual: 35000, stok: 150, satuan: "Pcs", supplier: "PT Elektronik Jaya", lokasiRak: "A-01-01", deskripsi: "Kabel HDMI 2 meter" },
-        { kode: "BRG-002", nama: "Mouse Wireless Logitech", kategori: "Elektronik", hargaBeli: 120000, hargaJual: 150000, stok: 75, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "B-02-03", deskripsi: "Mouse wireless" },
-        { kode: "BRG-003", nama: "Keyboard Mechanical", kategori: "Elektronik", hargaBeli: 350000, hargaJual: 450000, stok: 10, satuan: "Pcs", supplier: "PT Razer Indonesia", lokasiRak: "B-02-05", deskripsi: "Keyboard mechanical RGB" },
-        { kode: "BRG-004", nama: "Monitor 24 Inch", kategori: "Elektronik", hargaBeli: 1200000, hargaJual: 1500000, stok: 45, satuan: "Unit", supplier: "PT Samsung Electronics", lokasiRak: "C-03-01", deskripsi: "Monitor LED" },
-        { kode: "BRG-005", nama: "SSD 512GB", kategori: "Storage", hargaBeli: 850000, hargaJual: 1000000, stok: 0, satuan: "Pcs", supplier: "PT Western Digital", lokasiRak: "D-04-02", deskripsi: "SSD NVMe 512GB" },
-        { kode: "BRG-006", nama: "RAM 8GB DDR4", kategori: "Komputer", hargaBeli: 450000, hargaJual: 550000, stok: 120, satuan: "Pcs", supplier: "PT Corsair", lokasiRak: "D-04-04", deskripsi: "RAM DDR4" },
-        { kode: "BRG-007", nama: "Webcam HD 1080p", kategori: "Aksesoris", hargaBeli: 180000, hargaJual: 250000, stok: 8, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "A-01-08", deskripsi: "Webcam HD" },
-        { kode: "BRG-008", nama: "Speaker Bluetooth", kategori: "Audio", hargaBeli: 200000, hargaJual: 280000, stok: 60, satuan: "Pcs", supplier: "PT JBL Indonesia", lokasiRak: "E-05-01", deskripsi: "Speaker portable" }
-    ];
     
     const katalogOnline = [
         { nama: "Monitor Gaming 24\"", kode: "ONL-MN24", harga: 1850000, kategori: "Elektronik", imageIcon: "fe-monitor", stokRekomendasi: 10, supplier: "LG Official" },
@@ -596,17 +615,7 @@ $(document).ready(function() {
                       </tr>`;
         });
         $('#tableBody').html(html);
-        
-        let totalStok = 0, stokMenipis = 0, stokHabis = 0;
-        gudangItems.forEach(item => {
-            if(item.stok === 0) stokHabis++;
-            else if(item.stok < 15) stokMenipis++;
-            totalStok += item.stok;
-        });
-        $('#totalBarangCount').text(gudangItems.length);
-        $('#stokTersediaCount').text(totalStok);
-        $('#stokMenipisCount').text(stokMenipis);
-        $('#stokHabisCount').text(stokHabis);
+        updateStatistics();
     }
     
     function loadListBarang() {
@@ -652,14 +661,21 @@ $(document).ready(function() {
     
     $('#simpanBarangBtn').click(function() {
         let newItem = {
-            kode: $('#kodeBarang').val(), nama: $('#namaBarang').val(), kategori: $('#kategoriBarang').val(),
+            kode: $('#kodeBarang').val(),
+            barcode: 'BRC' + Date.now(),
+            nama: $('#namaBarang').val(),
+            kategori: $('#kategoriBarang').val(),
             hargaBeli: parseInt($('#hargaBeli').val().replace(/[^0-9]/g,'')) || 0,
             hargaJual: parseInt($('#hargaJual').val().replace(/[^0-9]/g,'')) || 0,
-            stok: parseInt($('#stokAwal').val()) || 0, satuan: $('#satuanBarang').val(),
-            supplier: $('#supplierBarang').val(), lokasiRak: $('#lokasiRak').val(), deskripsi: $('#deskripsiBarang').val()
+            stok: parseInt($('#stokAwal').val()) || 0,
+            satuan: $('#satuanBarang').val(),
+            supplier: $('#supplierBarang').val(),
+            lokasiRak: $('#lokasiRak').val(),
+            deskripsi: $('#deskripsiBarang').val()
         };
         if(!newItem.kode || !newItem.nama) { alert("Lengkapi data!"); return; }
         gudangItems.push(newItem);
+        simpanGudangItems();
         renderTabelBarang();
         loadListBarang();
         $('#modalTambahBarang').modal('hide');
@@ -680,8 +696,8 @@ $(document).ready(function() {
         $('#editHargaJual').val('Rp ' + item.hargaJual.toLocaleString());
         $('#editStok').val(item.stok);
         $('#editSupplierBarang').val(item.supplier);
-        $('#editLokasiRak').val(item.lokasiRak);
-        $('#editDeskripsi').val(item.deskripsi);
+        $('#editLokasiRak').val(item.lokasiRak || '');
+        $('#editDeskripsi').val(item.deskripsi || '');
         $('#modalEditBarang').modal('show');
     });
     
@@ -689,14 +705,17 @@ $(document).ready(function() {
         let idx = parseInt($('#editIndex').val());
         gudangItems[idx] = {
             ...gudangItems[idx],
-            nama: $('#editNamaBarang').val(), kategori: $('#editKategoriBarang').val(),
+            nama: $('#editNamaBarang').val(),
+            kategori: $('#editKategoriBarang').val(),
             satuan: $('#editSatuanBarang').val(),
             hargaBeli: parseInt($('#editHargaBeli').val().replace(/[^0-9]/g,'')) || 0,
             hargaJual: parseInt($('#editHargaJual').val().replace(/[^0-9]/g,'')) || 0,
             stok: parseInt($('#editStok').val()) || 0,
             supplier: $('#editSupplierBarang').val(),
-            lokasiRak: $('#editLokasiRak').val(), deskripsi: $('#editDeskripsi').val()
+            lokasiRak: $('#editLokasiRak').val(),
+            deskripsi: $('#editDeskripsi').val()
         };
+        simpanGudangItems();
         renderTabelBarang();
         loadListBarang();
         $('#modalEditBarang').modal('hide');
@@ -718,6 +737,7 @@ $(document).ready(function() {
             row.addClass('fade-out-row');
             setTimeout(() => {
                 gudangItems.splice(hapusIndex, 1);
+                simpanGudangItems();
                 renderTabelBarang();
                 loadListBarang();
                 $('#modalHapusBarang').modal('hide');
@@ -738,12 +758,10 @@ $(document).ready(function() {
         $('#jumlahBeli').val(10);
         $('#catatanPembelian').val('');
         $('input[name="supplierOption"]').val(['DNSFiber Store']);
-        $('input[name="rolePengaju"]').val(['Admin']);
         $('#storeLainOptions').hide();
-        // Reset role selection
         $('#roleAdmin').prop('checked', true);
         $('.role-radio').removeClass('selected');
-        $('.role-radio:first').addClass('selected');
+        $('#roleAdminBox').addClass('selected');
         $('#modalPengadaanBarang').modal('show');
     });
     
