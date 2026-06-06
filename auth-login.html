@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+    <title>Login Page - Admin Gudang Mahawira</title>
+    <!-- Simple bar CSS -->
+    <link rel="stylesheet" href="css/simplebar.css">
+    <!-- Fonts CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!-- Icons CSS -->
+    <link rel="stylesheet" href="css/feather.css">
+    <!-- Date Range Picker CSS -->
+    <link rel="stylesheet" href="css/daterangepicker.css">
+    <!-- App CSS -->
+    <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
+    <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
+    
+    <style>
+      body {
+        font-family: 'Overpass', sans-serif;
+      }
+      
+      .login-left {
+        background: white;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      
+      .brand-content {
+        text-align: center;
+        color: rgba(0,0,0,0.7);
+        position: relative;
+        z-index: 1;
+        padding: 40px;
+      }
+      
+      .brand-logo {
+        width: 160px;
+        height: auto;
+        margin: 0 auto 30px;
+      }
+      
+      .brand-logo img {
+        width: 100%;
+        height: auto;
+      }
+      
+      .brand-content h1 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: rgba(0,0,0,0.8);
+      }
+      
+      .brand-content p {
+        font-size: 18px;
+        opacity: 0.6;
+        line-height: 1.6;
+      }
+      
+      .feature-list {
+        text-align: left;
+        margin-top: 40px;
+        padding-left: 0;
+        list-style: none;
+      }
+      
+      .feature-list li {
+        margin-bottom: 15px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        opacity: 0.7;
+      }
+      
+      .feature-list li::before {
+        content: "✓";
+        background: rgba(0,0,0,0.2);
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: rgba(0,0,0,0.6);
+      }
+      
+      .login-right {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        height: 100vh;
+        overflow-y: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .login-form-container {
+        width: 100%;
+        max-width: 450px;
+        padding: 40px;
+      }
+      
+      .form-group {
+        margin-bottom: 20px;
+      }
+      
+      .form-group label {
+        font-weight: 600;
+        color: white;
+        margin-bottom: 8px;
+        font-size: 14px;
+        display: block;
+      }
+      
+      .form-control {
+        border-radius: 12px;
+        border: none;
+        padding: 12px 16px;
+        font-size: 14px;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+      }
+      
+      .form-control:focus {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        outline: none;
+        border: none;
+      }
+      
+      .checkbox {
+        margin: 20px 0;
+      }
+      
+      .checkbox label {
+        color: rgba(255,255,255,0.8);
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .checkbox input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: #2a5298;
+      }
+      
+      .btn-login {
+        background: white;
+        border: none;
+        padding: 14px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        color: #2a5298;
+        border-radius: 12px;
+        font-size: 16px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        width: 100%;
+      }
+      
+      .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        background: white;
+        color: #1e3c72;
+      }
+      
+      h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: white;
+      }
+      
+      .text-muted {
+        color: rgba(255,255,255,0.7) !important;
+      }
+      
+      .text-primary {
+        color: #a3bffa !important;
+      }
+      
+      .text-primary:hover {
+        color: white !important;
+      }
+      
+      hr {
+        margin: 25px 0;
+        border-color: rgba(255,255,255,0.2);
+      }
+      
+      @media (max-width: 768px) {
+        .login-left {
+          display: none;
+        }
+        .login-form-container {
+          padding: 20px;
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body class="light">
+    <div class="wrapper">
+      <div class="row no-gutters">
+        <!-- Left Side - Branding -->
+        <div class="col-lg-6 login-left">
+          <div class="brand-content">
+            <div class="brand-logo">
+              <img src="assets/images/logo_mahawira.png" alt="Logo Mahawira">
+            </div>
+            <h1>Welcome Back!</h1>
+            <p>Login to access your dashboard and manage your inventory with ease.</p>
+            <ul class="feature-list">
+              <li>Manage inventory efficiently</li>
+              <li>Real-time stock monitoring</li>
+              <li>Generate reports instantly</li>
+              <li>24/7 secure access</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Right Side - Login Form -->
+        <div class="col-lg-6 login-right">
+          <div class="login-form-container">
+            <div class="text-center mb-4">
+              <h2>Login</h2>
+              <p class="text-muted">Enter your credentials to access the system</p>
+            </div>
+            
+            <form action="./index.html" method="post">
+              <div class="form-group">
+                <label for="inputEmail">Email Address</label>
+                <input type="email" id="inputEmail" class="form-control form-control-lg" placeholder="admin@mahawira.com" required autofocus>
+              </div>
+              
+              <div class="form-group">
+                <label for="inputPassword">Password</label>
+                <input type="password" id="inputPassword" class="form-control form-control-lg" placeholder="Enter your password" required>
+              </div>
+              
+              <div class="checkbox mb-3">
+                <label>
+                  <input type="checkbox" value="remember-me"> Stay logged in
+                </label>
+              </div>
+              
+              <button class="btn btn-login" type="submit">Sign In</button>
+              
+              <div class="text-center mt-4">
+                <a href="./forgot-password.html" class="text-primary small">Forgot password?</a>
+              </div>
+              
+              <hr>
+              
+              <p class="text-center text-muted small mb-0">
+                Don't have an account? <a href="auth-register.html" class="text-primary">Create Account</a>
+              </p>
+              
+              <p class="mt-4 text-muted text-center small">© 2026 Admin Gudang Mahawira. All rights reserved.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/simplebar.min.js"></script>
+    <script src='js/daterangepicker.js'></script>
+    <script src='js/jquery.stickOnScroll.js'></script>
+    <script src="js/tinycolor-min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/apps.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'UA-56159088-1');
+    </script>
+  </body>
+</html>
