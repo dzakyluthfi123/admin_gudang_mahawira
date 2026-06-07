@@ -24,8 +24,16 @@
     <style>
         .main-content { background: white; }
         
-        .btn-add { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); border: none; color: white; padding: 8px 20px; border-radius: 8px; transition: all 0.3s ease; }
+        .btn-add {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
         .btn-add:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(30,60,114,0.3); color: white; }
+        
         .btn-edit { background: #4caf50; border: none; padding: 4px 12px; border-radius: 6px; color: white; font-size: 12px; }
         .btn-edit:hover { background: #45a049; color: white; }
         .btn-delete { background: #f44336; border: none; padding: 4px 12px; border-radius: 6px; color: white; font-size: 12px; }
@@ -36,13 +44,90 @@
         .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
         .btn-edit, .btn-delete, .btn-purchase { margin: 0; white-space: nowrap; }
         
+        /* Badge untuk jenis barang */
+        .badge-lama {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .badge-baru {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
         .badge-stok { background: #e8f5e9; color: #2e7d32; padding: 5px 10px; border-radius: 20px; font-size: 12px; display: inline-block; }
         .badge-stok-render { background: #fff3e0; color: #e65100; padding: 5px 10px; border-radius: 20px; font-size: 12px; display: inline-block; }
         .badge-stok-habis { background: #ffebee; color: #c62828; padding: 5px 10px; border-radius: 20px; font-size: 12px; display: inline-block; }
         
-        .table th { border-top: none; font-weight: 600; color: #1e3c72; }
+        .table th { border-top: none; font-weight: 600; color: #1e3c72; background: #f8f9fc; }
         .card { border-radius: 12px; border: none; }
         h2 { color: #1e3c72; }
+        
+        /* Tab styling */
+        .nav-pills-custom .nav-link {
+            color: #1e3c72;
+            background: #f1f5f9;
+            margin-right: 10px;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .nav-pills-custom .nav-link.active {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            box-shadow: 0 4px 12px rgba(30,60,114,0.3);
+        }
+        .nav-pills-custom .nav-link:hover:not(.active) {
+            background: #e2e8f0;
+        }
+        
+        /* Statistik card */
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            height: 100%;
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .stat-number { font-size: 28px; font-weight: 700; color: #1e3c72; line-height: 1.2; }
+        .stat-label { font-size: 13px; color: #6c757d; margin-top: 5px; }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+        .section-header-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .section-header-icon.lama { background: rgba(108,117,125,0.15); color: #6c757d; }
+        .section-header-icon.baru { background: rgba(40,167,69,0.15); color: #28a745; }
+        .section-header h4 { margin: 0; color: #1e3c72; font-weight: 600; }
+        .section-header p { margin: 0; color: #6c757d; font-size: 13px; }
         
         .modal .nav-tabs .nav-link { color: #1e3c72; font-weight: 500; border: none; border-bottom: 2px solid transparent; padding: 10px 16px; }
         .modal .nav-tabs .nav-link.active { color: #2a5298; border-bottom: 2px solid #2a5298; background: transparent; }
@@ -66,47 +151,13 @@
         .fade-out-row { animation: fadeOut 0.4s ease-out forwards; }
         @keyframes fadeOut { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; transform: translateX(-20px); display: none; } }
         
-        .role-radio-group {
-            display: flex;
-            gap: 20px;
-            margin-top: 8px;
-        }
-        .role-radio {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 15px;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            flex: 1;
-        }
-        .role-radio:hover {
-            border-color: #2a5298;
-            background: #f8f9fc;
-        }
-        .role-radio.selected {
-            border-color: #2a5298;
-            background: rgba(42,82,152,0.05);
-        }
-        .role-radio input {
-            margin: 0;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-        .role-radio label {
-            margin: 0;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        .role-radio small {
-            font-size: 11px;
-            color: #6c757d;
-            display: block;
-            font-weight: normal;
-        }
+        .role-radio-group { display: flex; gap: 20px; margin-top: 8px; }
+        .role-radio { display: flex; align-items: center; gap: 8px; padding: 10px 15px; border: 1px solid #e2e8f0; border-radius: 10px; cursor: pointer; transition: all 0.2s; flex: 1; }
+        .role-radio:hover { border-color: #2a5298; background: #f8f9fc; }
+        .role-radio.selected { border-color: #2a5298; background: rgba(42,82,152,0.05); }
+        .role-radio input { margin: 0; width: 18px; height: 18px; cursor: pointer; }
+        .role-radio label { margin: 0; cursor: pointer; font-weight: 500; }
+        .role-radio small { font-size: 11px; color: #6c757d; display: block; font-weight: normal; }
         
         @media (max-width: 768px) {
             .table-responsive { overflow-x: auto; }
@@ -115,6 +166,9 @@
             .action-buttons { flex-direction: column; align-items: flex-start; gap: 6px; }
             .btn-edit, .btn-delete, .btn-purchase { width: 100%; text-align: center; }
             .role-radio-group { flex-direction: column; gap: 10px; }
+            .nav-pills-custom { flex-direction: column; gap: 10px; }
+            .nav-pills-custom .nav-link { text-align: center; margin-right: 0; }
+            .stat-number { font-size: 22px; }
         }
     </style>
 </head>
@@ -274,26 +328,212 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="row align-items-center my-4">
-                        <div class="col"><h2 class="mb-0">Data Barang</h2><p class="text-muted">Kelola semua data barang yang ada di gudang</p></div>
-                        <div class="col-auto"><button class="btn btn-add" data-toggle="modal" data-target="#modalTambahBarang"><i class="fe fe-plus fe-12 mr-2"></i>Tambah Barang</button></div>
+                        <div class="col">
+                            <h2 class="mb-0">Pendataan Barang Gudang</h2>
+                            <p class="text-muted">Kelola semua data barang lama dan baru yang ada di gudang</p>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-add" data-toggle="modal" data-target="#modalTambahBarang">
+                                <i class="fe fe-plus fe-12 mr-2"></i>Tambah Barang
+                            </button>
+                        </div>
                     </div>
                     
                     <!-- Statistics Cards -->
                     <div class="row mb-4">
-                        <div class="col-md-3 mb-3"><div class="card shadow-sm border-0"><div class="card-body"><div class="row align-items-center"><div class="col-3 text-center"><div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center" style="background: rgba(30,60,114,0.1); width: 48px; height: 48px;"><i class="fe fe-package fe-24 text-primary"></i></div></div><div class="col"><p class="small text-muted mb-0">Total Barang</p><span class="h3 mb-0" id="totalBarangCount">0</span></div></div></div></div></div>
-                        <div class="col-md-3 mb-3"><div class="card shadow-sm border-0"><div class="card-body"><div class="row align-items-center"><div class="col-3 text-center"><div class="rounded-circle bg-success bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center" style="background: rgba(46,125,50,0.1); width: 48px; height: 48px;"><i class="fe fe-check-circle fe-24 text-success"></i></div></div><div class="col"><p class="small text-muted mb-0">Stok Tersedia</p><span class="h3 mb-0" id="stokTersediaCount">0</span></div></div></div></div></div>
-                        <div class="col-md-3 mb-3"><div class="card shadow-sm border-0"><div class="card-body"><div class="row align-items-center"><div class="col-3 text-center"><div class="rounded-circle bg-warning bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center" style="background: rgba(245,124,0,0.1); width: 48px; height: 48px;"><i class="fe fe-alert-triangle fe-24 text-warning"></i></div></div><div class="col"><p class="small text-muted mb-0">Stok Menipis</p><span class="h3 mb-0" id="stokMenipisCount">0</span></div></div></div></div></div>
-                        <div class="col-md-3 mb-3"><div class="card shadow-sm border-0"><div class="card-body"><div class="row align-items-center"><div class="col-3 text-center"><div class="rounded-circle bg-danger bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center" style="background: rgba(198,40,40,0.1); width: 48px; height: 48px;"><i class="fe fe-x-circle fe-24 text-danger"></i></div></div><div class="col"><p class="small text-muted mb-0">Stok Habis</p><span class="h3 mb-0" id="stokHabisCount">0</span></div></div></div></div></div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="stat-number" id="totalBarangCount">0</div>
+                                        <div class="stat-label">Total Barang</div>
+                                    </div>
+                                    <i class="fe fe-package fe-24 text-primary" style="opacity: 0.5;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="stat-number" id="barangLamaCount">0</div>
+                                        <div class="stat-label">Barang Lama</div>
+                                    </div>
+                                    <i class="fe fe-archive fe-24 text-secondary" style="opacity: 0.5;"></i>
+                                </div>
+                                <div class="mt-2 small text-muted">Stok awal gudang</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="stat-number" id="barangBaruCount">0</div>
+                                        <div class="stat-label">Barang Baru</div>
+                                    </div>
+                                    <i class="fe fe-plus-circle fe-24 text-success" style="opacity: 0.5;"></i>
+                                </div>
+                                <div class="mt-2 small text-muted">Tambahan terbaru</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="stat-number" id="totalStokCount">0</div>
+                                        <div class="stat-label">Total Stok</div>
+                                    </div>
+                                    <i class="fe fe-box fe-24 text-warning" style="opacity: 0.5;"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
-                    <!-- Data Table -->
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0" id="dataTable">
-                                    <thead><tr><th>No</th><th>Kode Barang</th><th>Nama Barang</th><th>Kategori</th><th>Harga Beli</th><th>Harga Jual</th><th>Stok</th><th>Satuan</th><th>Supplier</th><th>Aksi</th></tr></thead>
-                                    <tbody id="tableBody"></tbody>
-                                </table>
+                    <!-- TAB UNTUK MEMISAHKAN BARANG LAMA DAN BARU -->
+                    <ul class="nav nav-pills nav-pills-custom mb-4" id="jenisTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-target="#allContent" type="button" role="tab">
+                                📋 Semua Barang
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="lama-tab" data-bs-toggle="pill" data-target="#lamaContent" type="button" role="tab">
+                                📦 Barang Lama
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="baru-tab" data-bs-toggle="pill" data-target="#baruContent" type="button" role="tab">
+                                🆕 Barang Baru
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <!-- Search Bar -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="searchBarang" placeholder="Cari kode, nama barang, atau supplier..." style="border-radius: 10px;">
+                        </div>
+                        <div class="col-md-6 text-md-right mt-2 mt-md-0">
+                            <button class="btn btn-outline-secondary btn-sm" id="resetFilterBtn">
+                                <i class="fe fe-refresh-ccw fe-12"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- TAB CONTENT -->
+                    <div class="tab-content" id="jenisTabContent">
+                        <!-- SEMUA BARANG -->
+                        <div class="tab-pane fade show active" id="allContent" role="tabpanel">
+                            <div class="card shadow-sm">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Jenis</th>
+                                                    <th>Kode</th>
+                                                    <th>Nama Barang</th>
+                                                    <th>Kategori</th>
+                                                    <th>Harga Beli</th>
+                                                    <th>Harga Jual</th>
+                                                    <th>Stok</th>
+                                                    <th>Satuan</th>
+                                                    <th>Supplier</th>
+                                                    <th>Tgl Masuk</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="allTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row align-items-center p-3">
+                                        <div class="col-md-6">
+                                            <p class="text-muted small mb-0" id="allTableInfo"></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <nav class="d-flex justify-content-end">
+                                                <ul class="pagination pagination-sm mb-0" id="allPagination"></ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- BARANG LAMA -->
+                        <div class="tab-pane fade" id="lamaContent" role="tabpanel">
+                            <div class="card shadow-sm">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Kode</th>
+                                                    <th>Nama Barang</th>
+                                                    <th>Kategori</th>
+                                                    <th>Harga Beli</th>
+                                                    <th>Harga Jual</th>
+                                                    <th>Stok</th>
+                                                    <th>Satuan</th>
+                                                    <th>Supplier</th>
+                                                    <th>Tgl Masuk</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="lamaTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row align-items-center p-3">
+                                        <div class="col-md-6">
+                                            <p class="text-muted small mb-0" id="lamaTableInfo"></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <nav class="d-flex justify-content-end">
+                                                <ul class="pagination pagination-sm mb-0" id="lamaPagination"></ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- BARANG BARU -->
+                        <div class="tab-pane fade" id="baruContent" role="tabpanel">
+                            <div class="card shadow-sm">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Kode</th>
+                                                    <th>Nama Barang</th>
+                                                    <th>Kategori</th>
+                                                    <th>Harga Beli</th>
+                                                    <th>Harga Jual</th>
+                                                    <th>Stok</th>
+                                                    <th>Satuan</th>
+                                                    <th>Supplier</th>
+                                                    <th>Tgl Masuk</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="baruTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row align-items-center p-3">
+                                        <div class="col-md-6">
+                                            <p class="text-muted small mb-0" id="baruTableInfo"></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <nav class="d-flex justify-content-end">
+                                                <ul class="pagination pagination-sm mb-0" id="baruPagination"></ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -306,7 +546,7 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header bg-primary" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
-                        <h5 class="modal-title" style="color: white;">Tambah Barang ke Gudang</h5>
+                        <h5 class="modal-title" style="color: white;">Tambah Barang Baru ke Gudang</h5>
                         <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
                     </div>
                     <div class="modal-body">
@@ -351,7 +591,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="button" class="btn btn-primary" id="simpanBarangBtn">Simpan Barang</button>
+                        <button type="button" class="btn btn-primary" id="simpanBarangBtn">Simpan Barang Baru</button>
                     </div>
                 </div>
             </div>
@@ -444,7 +684,7 @@
                         <form id="formEditBarang">
                             <input type="hidden" id="editIndex">
                             <div class="row">
-                                <div class="col-md-6"><div class="form-group"><label>Kode Barang</label><input type="text" class="form-control" id="editKodeBarang" readonly style="background:#e9ecef;"></div></div>
+                                <div class="col-md-6"><div class="form-group"><label>Kode Barang</label><input type="text" class="form-control" id="editKodeBarang" readonly></div></div>
                                 <div class="col-md-6"><div class="form-group"><label>Nama Barang</label><input type="text" class="form-control" id="editNamaBarang"></div></div>
                             </div>
                             <div class="row">
@@ -510,67 +750,245 @@
 
 <script>
 $(document).ready(function() {
-    if($.fn.DataTable) $('#dataTable').DataTable({ paging: false, info: false, searching: false, lengthChange: false });
-    
-    // ==================== AMBIL DATA DARI LOCALSTORAGE ====================
+    // ==================== DATA DUMMY ====================
     let gudangItems = JSON.parse(localStorage.getItem('gudangItems') || '[]');
     
-    // Jika localStorage kosong, gunakan data dummy
+    // Data dummy dengan pembagian lama dan baru
     if (gudangItems.length === 0) {
+        let today = new Date();
+        let weekAgo = new Date(today);
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        let monthAgo = new Date(today);
+        monthAgo.setDate(monthAgo.getDate() - 30);
+        let twoMonthsAgo = new Date(today);
+        twoMonthsAgo.setDate(twoMonthsAgo.getDate() - 60);
+        
         gudangItems = [
-            { kode: "BRG-001", barcode: "8901234567890", nama: "Kabel HDMI 2m", kategori: "Aksesoris", hargaBeli: 25000, hargaJual: 35000, stok: 150, satuan: "Pcs", supplier: "PT Elektronik Jaya", lokasiRak: "A-01-01", deskripsi: "Kabel HDMI 2 meter" },
-            { kode: "BRG-002", barcode: "8901234567891", nama: "Mouse Wireless Logitech", kategori: "Elektronik", hargaBeli: 120000, hargaJual: 150000, stok: 75, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "B-02-03", deskripsi: "Mouse wireless" },
-            { kode: "BRG-003", barcode: "8901234567892", nama: "Keyboard Mechanical", kategori: "Elektronik", hargaBeli: 350000, hargaJual: 450000, stok: 10, satuan: "Pcs", supplier: "PT Razer Indonesia", lokasiRak: "B-02-05", deskripsi: "Keyboard mechanical RGB" },
-            { kode: "BRG-004", barcode: "8901234567893", nama: "Monitor 24 Inch", kategori: "Elektronik", hargaBeli: 1200000, hargaJual: 1500000, stok: 45, satuan: "Unit", supplier: "PT Samsung Electronics", lokasiRak: "C-03-01", deskripsi: "Monitor LED" },
-            { kode: "BRG-005", barcode: "8901234567894", nama: "SSD 512GB", kategori: "Storage", hargaBeli: 850000, hargaJual: 1000000, stok: 0, satuan: "Pcs", supplier: "PT Western Digital", lokasiRak: "D-04-02", deskripsi: "SSD NVMe 512GB" },
-            { kode: "BRG-006", barcode: "8901234567895", nama: "RAM 8GB DDR4", kategori: "Komputer", hargaBeli: 450000, hargaJual: 550000, stok: 120, satuan: "Pcs", supplier: "PT Corsair", lokasiRak: "D-04-04", deskripsi: "RAM DDR4" },
-            { kode: "BRG-007", barcode: "8901234567896", nama: "Webcam HD 1080p", kategori: "Aksesoris", hargaBeli: 180000, hargaJual: 250000, stok: 8, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "A-01-08", deskripsi: "Webcam HD" },
-            { kode: "BRG-008", barcode: "8901234567897", nama: "Speaker Bluetooth", kategori: "Audio", hargaBeli: 200000, hargaJual: 280000, stok: 60, satuan: "Pcs", supplier: "PT JBL Indonesia", lokasiRak: "E-05-01", deskripsi: "Speaker portable" }
+            // BARANG LAMA (sudah ada dari awal)
+            { kode: "BRG-001", nama: "Kabel HDMI 2m", kategori: "Aksesoris", hargaBeli: 25000, hargaJual: 35000, stok: 150, satuan: "Pcs", supplier: "PT Elektronik Jaya", lokasiRak: "A-01-01", deskripsi: "Kabel HDMI 2 meter", jenis: "lama", tanggalMasuk: twoMonthsAgo.toISOString().split('T')[0] },
+            { kode: "BRG-002", nama: "Mouse Wireless Logitech", kategori: "Elektronik", hargaBeli: 120000, hargaJual: 150000, stok: 75, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "B-02-03", deskripsi: "Mouse wireless", jenis: "lama", tanggalMasuk: twoMonthsAgo.toISOString().split('T')[0] },
+            { kode: "BRG-003", nama: "Keyboard Mechanical", kategori: "Elektronik", hargaBeli: 350000, hargaJual: 450000, stok: 10, satuan: "Pcs", supplier: "PT Razer Indonesia", lokasiRak: "B-02-05", deskripsi: "Keyboard mechanical RGB", jenis: "lama", tanggalMasuk: monthAgo.toISOString().split('T')[0] },
+            { kode: "BRG-004", nama: "Monitor 24 Inch", kategori: "Elektronik", hargaBeli: 1200000, hargaJual: 1500000, stok: 45, satuan: "Unit", supplier: "PT Samsung Electronics", lokasiRak: "C-03-01", deskripsi: "Monitor LED", jenis: "lama", tanggalMasuk: twoMonthsAgo.toISOString().split('T')[0] },
+            { kode: "BRG-005", nama: "SSD 512GB", kategori: "Storage", hargaBeli: 850000, hargaJual: 1000000, stok: 0, satuan: "Pcs", supplier: "PT Western Digital", lokasiRak: "D-04-02", deskripsi: "SSD NVMe 512GB", jenis: "lama", tanggalMasuk: monthAgo.toISOString().split('T')[0] },
+            // BARANG BARU (tambahan baru)
+            { kode: "BRG-006", nama: "RAM 16GB DDR5", kategori: "Komputer", hargaBeli: 750000, hargaJual: 950000, stok: 30, satuan: "Pcs", supplier: "PT Corsair", lokasiRak: "D-04-06", deskripsi: "RAM DDR5 16GB 5200MHz", jenis: "baru", tanggalMasuk: weekAgo.toISOString().split('T')[0] },
+            { kode: "BRG-007", nama: "Webcam 4K", kategori: "Aksesoris", hargaBeli: 450000, hargaJual: 650000, stok: 15, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "A-01-10", deskripsi: "Webcam 4K Ultra HD", jenis: "baru", tanggalMasuk: weekAgo.toISOString().split('T')[0] },
+            { kode: "BRG-008", nama: "Soundbar", kategori: "Audio", hargaBeli: 800000, hargaJual: 1200000, stok: 8, satuan: "Unit", supplier: "PT JBL Indonesia", lokasiRak: "E-05-03", deskripsi: "Soundbar 2.1 channel", jenis: "baru", tanggalMasuk: today.toISOString().split('T')[0] }
         ];
         localStorage.setItem('gudangItems', JSON.stringify(gudangItems));
     }
     
-    // Fungsi untuk menyimpan data ke localStorage
     function simpanGudangItems() {
         localStorage.setItem('gudangItems', JSON.stringify(gudangItems));
-        // Update statistik setelah simpan
+        renderAllTables();
         updateStatistics();
     }
     
-    // Fungsi update statistik
+    // Variabel pagination per tab
+    let allPage = 1, lamaPage = 1, baruPage = 1;
+    let rowsPerPage = 10;
+    let searchTerm = "";
+    
     function updateStatistics() {
-        let totalStok = 0, stokMenipis = 0, stokHabis = 0;
-        gudangItems.forEach(item => {
-            if(item.stok === 0) stokHabis++;
-            else if(item.stok < 15) stokMenipis++;
-            totalStok += item.stok;
-        });
-        $('#totalBarangCount').text(gudangItems.length);
-        $('#stokTersediaCount').text(totalStok);
-        $('#stokMenipisCount').text(stokMenipis);
-        $('#stokHabisCount').text(stokHabis);
+        let total = gudangItems.length;
+        let lama = gudangItems.filter(item => item.jenis === "lama").length;
+        let baru = gudangItems.filter(item => item.jenis === "baru").length;
+        let totalStok = gudangItems.reduce((sum, item) => sum + item.stok, 0);
+        
+        $('#totalBarangCount').text(total);
+        $('#barangLamaCount').text(lama);
+        $('#barangBaruCount').text(baru);
+        $('#totalStokCount').text(totalStok);
     }
     
-    // Function untuk select role
-    window.selectRole = function(role) {
-        if(role === 'Admin') {
-            $('#roleAdmin').prop('checked', true);
-            $('.role-radio').removeClass('selected');
-            $('#roleAdminBox').addClass('selected');
-        } else {
-            $('#roleTeknis').prop('checked', true);
-            $('.role-radio').removeClass('selected');
-            $('#roleTeknisBox').addClass('selected');
+    function getFilteredItems(items, filterType = null) {
+        let filtered = [...items];
+        if (filterType === "lama") {
+            filtered = filtered.filter(item => item.jenis === "lama");
+        } else if (filterType === "baru") {
+            filtered = filtered.filter(item => item.jenis === "baru");
         }
+        if (searchTerm !== "") {
+            filtered = filtered.filter(item => 
+                item.kode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.supplier.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+        return filtered;
     }
     
-    // Role radio click handler
-    $(document).on('click', '.role-radio', function() {
-        $(this).find('input').prop('checked', true);
-        $('.role-radio').removeClass('selected');
-        $(this).addClass('selected');
+    function renderTableBody(items, page, containerId, isAll = false, paginationId = null, infoId = null) {
+        let totalItems = items.length;
+        let totalPages = Math.ceil(totalItems / rowsPerPage);
+        if (page > totalPages) page = 1;
+        let start = (page - 1) * rowsPerPage;
+        let end = start + rowsPerPage;
+        let pageData = items.slice(start, end);
+        
+        let html = '';
+        pageData.forEach((item, idx) => {
+            let stokBadge = '';
+            if(item.stok === 0) stokBadge = `<span class="badge-stok-habis">✗ ${item.stok}</span>`;
+            else if(item.stok < 15) stokBadge = `<span class="badge-stok-render">⚠ ${item.stok}</span>`;
+            else stokBadge = `<span class="badge-stok">✓ ${item.stok}</span>`;
+            
+            let purchaseBtn = (item.stok === 0) ? `<button class="btn btn-purchase btn-sm btn-pengadaan" data-index="${gudangItems.indexOf(item)}"><i class="fe fe-shopping-cart fe-12"></i> Ajukan</button>` : '';
+            
+            if (isAll) {
+                let jenisBadge = item.jenis === 'lama' 
+                    ? '<span class="badge-lama"><i class="fe fe-archive fe-10"></i> Lama</span>'
+                    : '<span class="badge-baru"><i class="fe fe-plus fe-10"></i> Baru</span>';
+                html += `<tr>
+                            <td>${start + idx + 1}</td>
+                            <td>${jenisBadge}</td>
+                            <td><strong>${item.kode}</strong></td>
+                            <td>${item.nama}</td>
+                            <td>${item.kategori}</td>
+                            <td>Rp ${item.hargaBeli.toLocaleString('id-ID')}</td>
+                            <td>Rp ${item.hargaJual.toLocaleString('id-ID')}</td>
+                            <td>${stokBadge}</td>
+                            <td>${item.satuan}</td>
+                            <td>${item.supplier}</td>
+                            <td><small>${item.tanggalMasuk || '-'}</small></td>
+                            <td class="action-cell">
+                                <div class="action-buttons">
+                                    <button class="btn btn-edit btn-sm btn-edit-barang" data-index="${gudangItems.indexOf(item)}">Edit</button>
+                                    ${purchaseBtn}
+                                    <button class="btn btn-delete btn-sm btn-hapus-barang" data-index="${gudangItems.indexOf(item)}">Hapus</button>
+                                </div>
+                            </td>
+                          </tr>`;
+            } else {
+                html += `<tr>
+                            <td>${start + idx + 1}</td>
+                            <td><strong>${item.kode}</strong></td>
+                            <td>${item.nama}</td>
+                            <td>${item.kategori}</td>
+                            <td>Rp ${item.hargaBeli.toLocaleString('id-ID')}</td>
+                            <td>Rp ${item.hargaJual.toLocaleString('id-ID')}</td>
+                            <td>${stokBadge}</td>
+                            <td>${item.satuan}</td>
+                            <td>${item.supplier}</td>
+                            <td><small>${item.tanggalMasuk || '-'}</small></td>
+                            <td class="action-cell">
+                                <div class="action-buttons">
+                                    <button class="btn btn-edit btn-sm btn-edit-barang" data-index="${gudangItems.indexOf(item)}">Edit</button>
+                                    ${purchaseBtn}
+                                    <button class="btn btn-delete btn-sm btn-hapus-barang" data-index="${gudangItems.indexOf(item)}">Hapus</button>
+                                </div>
+                            </td>
+                          </tr>`;
+            }
+        });
+        
+        $(`#${containerId}`).html(html);
+        
+        if (infoId) {
+            let startDisplay = totalItems === 0 ? 0 : start + 1;
+            let endDisplay = Math.min(end, totalItems);
+            $(`#${infoId}`).text(`Menampilkan ${startDisplay} sampai ${endDisplay} dari ${totalItems} data`);
+        }
+        
+        if (paginationId) renderPagination(totalPages, page, paginationId, containerId, isAll);
+        
+        return page;
+    }
+    
+    function renderPagination(totalPages, currentPage, paginationId, containerId, isAll) {
+        let html = '';
+        html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" data-page="prev" data-container="${containerId}" data-isall="${isAll}">Sebelumnya</a>
+                </li>`;
+        
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 4);
+        
+        for (let i = startPage; i <= endPage; i++) {
+            html += `<li class="page-item ${currentPage === i ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}" data-container="${containerId}" data-isall="${isAll}">${i}</a>
+                    </li>`;
+        }
+        
+        html += `<li class="page-item ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" data-page="next" data-container="${containerId}" data-isall="${isAll}">Berikutnya</a>
+                </li>`;
+        
+        $(`#${paginationId}`).html(html);
+    }
+    
+    function renderAllTables() {
+        let allItems = getFilteredItems(gudangItems, null);
+        let lamaItems = getFilteredItems(gudangItems, "lama");
+        let baruItems = getFilteredItems(gudangItems, "baru");
+        
+        allPage = renderTableBody(allItems, allPage, "allTableBody", true, "allPagination", "allTableInfo");
+        lamaPage = renderTableBody(lamaItems, lamaPage, "lamaTableBody", false, "lamaPagination", "lamaTableInfo");
+        baruPage = renderTableBody(baruItems, baruPage, "baruTableBody", false, "baruPagination", "baruTableInfo");
+        
+        updateStatistics();
+    }
+    
+    // Event pagination
+    $(document).on('click', '.page-link', function(e) {
+        e.preventDefault();
+        let page = $(this).data('page');
+        let containerId = $(this).data('container');
+        let isAll = $(this).data('isall') === 'true';
+        let items = getFilteredItems(gudangItems, null);
+        let lamaItems = getFilteredItems(gudangItems, "lama");
+        let baruItems = getFilteredItems(gudangItems, "baru");
+        
+        if (containerId === "allTableBody") {
+            let totalPages = Math.ceil(items.length / rowsPerPage);
+            if (page === 'prev') { if (allPage > 1) allPage--; }
+            else if (page === 'next') { if (allPage < totalPages) allPage++; }
+            else { allPage = parseInt(page); }
+            allPage = renderTableBody(items, allPage, "allTableBody", true, "allPagination", "allTableInfo");
+        } else if (containerId === "lamaTableBody") {
+            let totalPages = Math.ceil(lamaItems.length / rowsPerPage);
+            if (page === 'prev') { if (lamaPage > 1) lamaPage--; }
+            else if (page === 'next') { if (lamaPage < totalPages) lamaPage++; }
+            else { lamaPage = parseInt(page); }
+            lamaPage = renderTableBody(lamaItems, lamaPage, "lamaTableBody", false, "lamaPagination", "lamaTableInfo");
+        } else if (containerId === "baruTableBody") {
+            let totalPages = Math.ceil(baruItems.length / rowsPerPage);
+            if (page === 'prev') { if (baruPage > 1) baruPage--; }
+            else if (page === 'next') { if (baruPage < totalPages) baruPage++; }
+            else { baruPage = parseInt(page); }
+            baruPage = renderTableBody(baruItems, baruPage, "baruTableBody", false, "baruPagination", "baruTableInfo");
+        }
     });
     
+    // Search
+    $('#searchBarang').on('keyup', function() {
+        searchTerm = $(this).val();
+        allPage = 1; lamaPage = 1; baruPage = 1;
+        renderAllTables();
+    });
+    
+    $('#resetFilterBtn').click(function() {
+        searchTerm = "";
+        $('#searchBarang').val('');
+        allPage = 1; lamaPage = 1; baruPage = 1;
+        renderAllTables();
+    });
+    
+    // Fungsi untuk menambah barang baru (otomatis sebagai BARANG BARU)
+    function tambahBarangBaru(item) {
+        let today = new Date().toISOString().split('T')[0];
+        let newItem = {
+            ...item,
+            jenis: "baru",
+            tanggalMasuk: today
+        };
+        gudangItems.push(newItem);
+        simpanGudangItems();
+        renderAllTables();
+        loadListBarang();
+    }
+    
+    // ==================== MODAL FUNCTIONS ====================
     const katalogOnline = [
         { nama: "Monitor Gaming 24\"", kode: "ONL-MN24", harga: 1850000, kategori: "Elektronik", imageIcon: "fe-monitor", stokRekomendasi: 10, supplier: "LG Official" },
         { nama: "SSD NVMe 1TB", kode: "ONL-SSD1", harga: 1250000, kategori: "Storage", imageIcon: "fe-hard-drive", stokRekomendasi: 20, supplier: "Samsung Store" },
@@ -578,51 +996,11 @@ $(document).ready(function() {
         { nama: "Prosesor Intel i7", kode: "ONL-I7", harga: 4200000, kategori: "Komputer", imageIcon: "fe-cpu", stokRekomendasi: 5, supplier: "Intel Authorized" }
     ];
     
-    // Fungsi untuk menyimpan pengajuan ke localStorage
-    function simpanPengajuan(pengajuan) {
-        let existing = JSON.parse(localStorage.getItem('pengajuanList') || '[]');
-        existing.unshift(pengajuan);
-        localStorage.setItem('pengajuanList', JSON.stringify(existing));
-    }
-    
-    function renderTabelBarang() {
-        let html = '';
-        gudangItems.forEach((item, index) => {
-            let stokBadge = '';
-            if(item.stok === 0) stokBadge = `<span class="badge-stok-habis">✗ ${item.stok}</span>`;
-            else if(item.stok < 15) stokBadge = `<span class="badge-stok-render">⚠ ${item.stok}</span>`;
-            else stokBadge = `<span class="badge-stok">✓ ${item.stok}</span>`;
-            
-            let purchaseBtn = (item.stok === 0) ? `<button class="btn btn-purchase btn-sm btn-pengadaan" data-index="${index}"><i class="fe fe-shopping-cart fe-12"></i> Ajukan</button>` : '';
-            
-            html += `<tr>
-                        <td>${index+1}</td>
-                        <td><strong>${item.kode}</strong></td>
-                        <td>${item.nama}</td>
-                        <td>${item.kategori}</td>
-                        <td>Rp ${item.hargaBeli.toLocaleString('id-ID')}</td>
-                        <td>Rp ${item.hargaJual.toLocaleString('id-ID')}</td>
-                        <td>${stokBadge}</td>
-                        <td>${item.satuan}</td>
-                        <td>${item.supplier}</td>
-                        <td class="action-cell">
-                            <div class="action-buttons">
-                                <button class="btn btn-edit btn-sm btn-edit-barang" data-index="${index}">Edit</button>
-                                ${purchaseBtn}
-                                <button class="btn btn-delete btn-sm btn-hapus-barang" data-index="${index}">Hapus</button>
-                            </div>
-                          </div>
-                      </tr>`;
-        });
-        $('#tableBody').html(html);
-        updateStatistics();
-    }
-    
     function loadListBarang() {
         let html = '';
         gudangItems.forEach(item => {
             html += `<div class="list-barang-item d-flex justify-content-between align-items-center">
-                        <div><strong>${item.kode}</strong> - ${item.nama} <span class="badge-stok-mini ml-2">Stok: ${item.stok}</span></div>
+                        <div><strong>${item.kode}</strong> - ${item.nama} <span class="badge-stok-mini ml-2">Stok: ${item.stok}</span><br><small class="text-muted">${item.jenis === 'lama' ? '📦 Barang Lama' : '🆕 Barang Baru'}</small></div>
                         <button class="btn btn-sm btn-outline-primary pilihBarangGudang" data-kode="${item.kode}" data-nama="${item.nama}" data-kategori="${item.kategori}" data-hargaBeli="${item.hargaBeli}" data-satuan="${item.satuan}" data-supplier="${item.supplier}">Pilih</button>
                     </div>`;
         });
@@ -637,7 +1015,6 @@ $(document).ready(function() {
         $('#katalogGrid').html(html);
     }
     
-    // Event handlers
     $(document).on('click', '.pilihBarangGudang', function() {
         $('#kodeBarang').val($(this).data('kode') + '_VAR');
         $('#namaBarang').val($(this).data('nama') + ' (tambah)');
@@ -660,9 +1037,9 @@ $(document).ready(function() {
     });
     
     $('#simpanBarangBtn').click(function() {
+        let today = new Date().toISOString().split('T')[0];
         let newItem = {
             kode: $('#kodeBarang').val(),
-            barcode: 'BRC' + Date.now(),
             nama: $('#namaBarang').val(),
             kategori: $('#kategoriBarang').val(),
             hargaBeli: parseInt($('#hargaBeli').val().replace(/[^0-9]/g,'')) || 0,
@@ -671,19 +1048,20 @@ $(document).ready(function() {
             satuan: $('#satuanBarang').val(),
             supplier: $('#supplierBarang').val(),
             lokasiRak: $('#lokasiRak').val(),
-            deskripsi: $('#deskripsiBarang').val()
+            deskripsi: $('#deskripsiBarang').val(),
+            jenis: "baru",
+            tanggalMasuk: today
         };
         if(!newItem.kode || !newItem.nama) { alert("Lengkapi data!"); return; }
         gudangItems.push(newItem);
         simpanGudangItems();
-        renderTabelBarang();
+        renderAllTables();
         loadListBarang();
         $('#modalTambahBarang').modal('hide');
         $('#formTambahBarang')[0].reset();
-        alert("Barang berhasil ditambahkan!");
+        alert(`✅ Barang baru "${newItem.nama}" berhasil ditambahkan! (Barang Baru)`);
     });
     
-    // Edit barang
     $(document).on('click', '.btn-edit-barang', function() {
         let idx = $(this).data('index');
         let item = gudangItems[idx];
@@ -716,13 +1094,12 @@ $(document).ready(function() {
             deskripsi: $('#editDeskripsi').val()
         };
         simpanGudangItems();
-        renderTabelBarang();
+        renderAllTables();
         loadListBarang();
         $('#modalEditBarang').modal('hide');
         alert("Barang berhasil diupdate!");
     });
     
-    // Hapus dengan animasi
     let hapusIndex = null;
     $(document).on('click', '.btn-hapus-barang', function() {
         hapusIndex = $(this).data('index');
@@ -738,7 +1115,7 @@ $(document).ready(function() {
             setTimeout(() => {
                 gudangItems.splice(hapusIndex, 1);
                 simpanGudangItems();
-                renderTabelBarang();
+                renderAllTables();
                 loadListBarang();
                 $('#modalHapusBarang').modal('hide');
                 alert("Barang berhasil dihapus!");
@@ -747,9 +1124,32 @@ $(document).ready(function() {
         }
     });
     
-    // ==================== PENGAJUAN PEMBELIAN ====================
-    let pengadaanIndex = null;
+    // Role select functions
+    window.selectRole = function(role) {
+        if(role === 'Admin') {
+            $('#roleAdmin').prop('checked', true);
+            $('.role-radio').removeClass('selected');
+            $('#roleAdminBox').addClass('selected');
+        } else {
+            $('#roleTeknis').prop('checked', true);
+            $('.role-radio').removeClass('selected');
+            $('#roleTeknisBox').addClass('selected');
+        }
+    };
     
+    $(document).on('click', '.role-radio', function() {
+        $(this).find('input').prop('checked', true);
+        $('.role-radio').removeClass('selected');
+        $(this).addClass('selected');
+    });
+    
+    function simpanPengajuan(pengajuan) {
+        let existing = JSON.parse(localStorage.getItem('pengajuanList') || '[]');
+        existing.unshift(pengajuan);
+        localStorage.setItem('pengajuanList', JSON.stringify(existing));
+    }
+    
+    let pengadaanIndex = null;
     $(document).on('click', '.btn-pengadaan', function() {
         pengadaanIndex = $(this).data('index');
         let item = gudangItems[pengadaanIndex];
@@ -811,7 +1211,7 @@ $(document).ready(function() {
         
         simpanPengajuan(newPengajuan);
         
-        alert(`✅ Pengajuan Pembelian Berhasil!\n\n📋 Nomor: ${id}\n📦 Barang: ${item.nama}\n🔢 Jumlah: ${jumlah} ${item.satuan}\n🏢 Supplier: ${finalSupplier}\n👤 Diajukan oleh: ${namaPengaju}\n\n📌 Lihat daftar pengajuan di menu "Pengajuan Pembelian" pada sidebar.`);
+        alert(`✅ Pengajuan Pembelian Berhasil!\n\n📋 Nomor: ${id}\n📦 Barang: ${item.nama}\n🔢 Jumlah: ${jumlah} ${item.satuan}\n🏢 Supplier: ${finalSupplier}\n👤 Diajukan oleh: ${namaPengaju}`);
         
         $('#modalPengadaanBarang').modal('hide');
         
@@ -822,9 +1222,27 @@ $(document).ready(function() {
     
     $('#modalTambahBarang').on('shown.bs.modal', function() { loadListBarang(); loadKatalogOnline(); });
     
-    renderTabelBarang();
+    // Tab navigation with Bootstrap 5 (using data-bs-toggle)
+    $('.nav-link[data-bs-toggle="pill"]').on('shown.bs.tab', function(e) {
+        // Re-render table saat tab berubah
+        renderAllTables();
+    });
+    
+    renderAllTables();
     loadListBarang();
     loadKatalogOnline();
+    
+    // Fix for Bootstrap 5 compatibility
+    if (typeof bootstrap !== 'undefined') {
+        var triggerTabList = [].slice.call(document.querySelectorAll('#jenisTab button'));
+        triggerTabList.forEach(function(triggerEl) {
+            var tabTrigger = new bootstrap.Tab(triggerEl);
+            triggerEl.addEventListener('click', function(event) {
+                event.preventDefault();
+                tabTrigger.show();
+            });
+        });
+    }
 });
 </script>
 </body>
