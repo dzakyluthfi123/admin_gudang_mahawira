@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>NOC - Request Barang | Admin Gudang Mahawira</title>
+    <!-- Simple bar CSS -->
+    <link rel="stylesheet" href="css/simplebar.css">
+    <!-- Fonts CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!-- Icons CSS -->
+    <link rel="stylesheet" href="css/feather.css">
+    <link rel="stylesheet" href="css/select2.css">
+    <link rel="stylesheet" href="css/dropzone.css">
+    <link rel="stylesheet" href="css/uppy.min.css">
+    <link rel="stylesheet" href="css/jquery.steps.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/quill.snow.css">
+    <link rel="stylesheet" href="css/daterangepicker.css">
+    <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
+    <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
+    
+    <style>
+        .main-content { background: #f8f9fc; margin-left: 280px; }
+        
+        .btn-request {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border: none;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        .btn-request:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255,152,0,0.4);
+            color: white;
+        }
+        
+        .btn-rab {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            border: none;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            width: 100%;
+        }
+        .btn-rab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220,53,69,0.4);
+            color: white;
+        }
+        
+        .btn-request:disabled {
+            background: #e9ecef;
+            color: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .katalog-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            height: 100%;
+            position: relative;
+        }
+        .katalog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .card-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            z-index: 1;
+        }
+        .badge-tersedia { background: #28a745; color: white; }
+        .badge-kosong { background: #dc3545; color: white; }
+        .badge-sedikit { background: #ffc107; color: #856404; }
+        .card-icon {
+            background: linear-gradient(145deg, #e9ecef, #dee2e6);
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #2a5298;
+        }
+        .card-body { padding: 16px; }
+        .card-title { font-weight: 700; font-size: 1rem; margin-bottom: 5px; color: #1e3c72; }
+        .card-code { font-size: 11px; color: #6c757d; margin-bottom: 8px; }
+        .card-price { font-size: 1.1rem; font-weight: 700; color: #2a5298; margin-bottom: 8px; }
+        .card-stok { font-size: 12px; color: #6c757d; margin-bottom: 12px; }
+        
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 380px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .cart-sidebar.open { transform: translateX(0); }
+        .cart-header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .close-cart { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+        .cart-body { flex: 1; overflow-y: auto; padding: 20px; }
+        .cart-empty { text-align: center; color: #6c757d; padding: 40px 20px; }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .cart-item-info h6 { margin: 0; font-size: 14px; font-weight: 600; }
+        .cart-item-info p { margin: 0; font-size: 12px; color: #6c757d; }
+        .remove-item { background: none; border: none; color: #dc3545; cursor: pointer; }
+        .cart-footer { padding: 20px; border-top: 1px solid #e2e8f0; background: #f8f9fc; }
+        .cart-total { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 600; }
+        .btn-submit-request {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            width: 100%;
+        }
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        .cart-overlay.show { display: block; }
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 12px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff9800;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* RAB Modal */
+        .rab-summary { background: #f8f9fc; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+        
+        @media (max-width: 768px) {
+            .main-content { margin-left: 0; }
+            .cart-sidebar { width: 100%; }
+            .katalog-grid { grid-template-columns: 1fr; }
+        }
+        
+        .katalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .search-filter {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .search-input, .filter-select {
+            border-radius: 30px;
+            border: 1px solid #e2e8f0;
+            padding: 10px 18px;
+            width: 100%;
+        }
+        .page-header { margin-bottom: 25px; }
+        .page-header h2 { color: #1e3c72; font-weight: 700; margin-bottom: 5px; }
+        
+        /* Navbar custom */
+        .navbar-custom {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar-brand-custom {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e3c72;
+        }
+        .topnav { background: white; }
+    </style>
+</head>
+<body class="vertical light">
+<div class="wrapper">
+    <!-- Navbar - SAMA PERSIS DENGAN DATA BARANG -->
+    <nav class="topnav navbar navbar-light">
+        <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar">
+            <i class="fe fe-menu navbar-toggler-icon"></i>
+        </button>
+        <form class="form-inline mr-auto searchform text-muted">
+            <input class="form-control mr-sm-2 bg-transparent border-0 pl-4 text-muted" type="search" placeholder="Type something...">
+        </form>
+        <ul class="nav">
+            <li class="nav-item"><a class="nav-link text-muted my-2" href="#" id="modeSwitcher" data-mode="light"><i class="fe fe-sun fe-16"></i></a></li>
+            <li class="nav-item"><a class="nav-link text-muted my-2" href="./#" data-toggle="modal" data-target=".modal-shortcut"><span class="fe fe-grid fe-16"></span></a></li>
+            <li class="nav-item nav-notif"><a class="nav-link text-muted my-2" href="./#" data-toggle="modal" data-target=".modal-notif"><span class="fe fe-bell fe-16"></span><span class="dot dot-md bg-success"></span></a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown">
+                    <span class="avatar avatar-sm mt-2"><img src="./assets/avatars/face-1.jpg" alt="..." class="avatar-img rounded-circle"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#">Profile</a><a class="dropdown-item" href="#">Settings</a><a class="dropdown-item" href="#">Activities</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    
+    <!-- Sidebar - SAMA PERSIS DENGAN DATA BARANG -->
+    <aside class="sidebar-left border-right bg-white shadow" id="leftSidebar" data-simplebar>
+        <a href="#" class="btn collapseSidebar toggle-btn d-lg-none text-muted ml-2 mt-3" data-toggle="toggle"><i class="fe fe-x"></i></a>
+        <nav class="vertnav navbar navbar-light">
+            <div class="w-100 mb-4 d-flex"><a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="./index.html"><img id="logo" class="navbar-brand-img brand-sm" src="assets/images/logo_mahawira.png" alt="Logo"></a></div>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item dropdown">
+                    <a href="#dashboard" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-home fe-16"></i><span class="ml-3 item-text">Dashboard</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="dashboard">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-analytics.html"><span class="ml-1 item-text">Analytics</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./data_barang.html"><span class="ml-1 item-text">Data Barang</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./pengajuan_pembelian.html"><span class="ml-1 item-text">Pengajuan Pembelian</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./scan_barang.html"><span class="ml-1 item-text">Input & Scan Barang</span></a></li>
+                        <li class="nav-item active"><a class="nav-link pl-3" href="./noc_request_barang.html"><span class="ml-1 item-text">Request Barang (NOC)</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-saas.html"><span class="ml-1 item-text">Saas Dashboard</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-system.html"><span class="ml-1 item-text">Systems</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="text-muted nav-heading mt-4 mb-1"><span>Components</span></p>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item dropdown"><a href="#ui-elements" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-box fe-16"></i><span class="ml-3 item-text">UI elements</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="ui-elements">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-color.html"><span class="ml-1 item-text">Colors</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-typograpy.html"><span class="ml-1 item-text">Typograpy</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-icons.html"><span class="ml-1 item-text">Icons</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-buttons.html"><span class="ml-1 item-text">Buttons</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-notification.html"><span class="ml-1 item-text">Notifications</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-modals.html"><span class="ml-1 item-text">Modals</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-tabs-accordion.html"><span class="ml-1 item-text">Tabs & Accordion</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-progress.html"><span class="ml-1 item-text">Progress</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item w-100"><a class="nav-link" href="widgets.html"><i class="fe fe-layers fe-16"></i><span class="ml-3 item-text">Widgets</span><span class="badge badge-pill badge-primary">New</span></a></li>
+                <li class="nav-item dropdown"><a href="#forms" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-credit-card fe-16"></i><span class="ml-3 item-text">Forms</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="forms">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_elements.html"><span class="ml-1 item-text">Basic Elements</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_advanced.html"><span class="ml-1 item-text">Advanced Elements</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_validation.html"><span class="ml-1 item-text">Validation</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_wizard.html"><span class="ml-1 item-text">Wizard</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_layouts.html"><span class="ml-1 item-text">Layouts</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_upload.html"><span class="ml-1 item-text">File upload</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#tables" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-grid fe-16"></i><span class="ml-3 item-text">Tables</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="tables">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./table_basic.html"><span class="ml-1 item-text">Basic Tables</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./table_advanced.html"><span class="ml-1 item-text">Advanced Tables</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./table_datatables.html"><span class="ml-1 item-text">Data Tables</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#charts" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-pie-chart fe-16"></i><span class="ml-3 item-text">Charts</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="charts">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./chart-inline.html"><span class="ml-1 item-text">Inline Chart</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./chart-chartjs.html"><span class="ml-1 item-text">Chartjs</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./chart-apexcharts.html"><span class="ml-1 item-text">ApexCharts</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./datamaps.html"><span class="ml-1 item-text">Datamaps</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="text-muted nav-heading mt-4 mb-1"><span>Apps</span></p>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item w-100"><a class="nav-link" href="calendar.html"><i class="fe fe-calendar fe-16"></i><span class="ml-3 item-text">Calendar</span></a></li>
+                <li class="nav-item dropdown"><a href="#contact" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-book fe-16"></i><span class="ml-3 item-text">Contacts</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="contact">
+                        <a class="nav-link pl-3" href="./contacts-list.html"><span class="ml-1">Contact List</span></a>
+                        <a class="nav-link pl-3" href="./contacts-grid.html"><span class="ml-1">Contact Grid</span></a>
+                        <a class="nav-link pl-3" href="./contacts-new.html"><span class="ml-1">New Contact</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#profile" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-user fe-16"></i><span class="ml-3 item-text">Profile</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="profile">
+                        <a class="nav-link pl-3" href="./profile.html"><span class="ml-1">Overview</span></a>
+                        <a class="nav-link pl-3" href="./profile-settings.html"><span class="ml-1">Settings</span></a>
+                        <a class="nav-link pl-3" href="./profile-security.html"><span class="ml-1">Security</span></a>
+                        <a class="nav-link pl-3" href="./profile-notification.html"><span class="ml-1">Notifications</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#fileman" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-folder fe-16"></i><span class="ml-3 item-text">File Manager</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="fileman">
+                        <a class="nav-link pl-3" href="./files-list.html"><span class="ml-1">Files List</span></a>
+                        <a class="nav-link pl-3" href="./files-grid.html"><span class="ml-1">Files Grid</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#support" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-compass fe-16"></i><span class="ml-3 item-text">Help Desk</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="support">
+                        <a class="nav-link pl-3" href="./support-center.html"><span class="ml-1">Home</span></a>
+                        <a class="nav-link pl-3" href="./support-tickets.html"><span class="ml-1">Tickets</span></a>
+                        <a class="nav-link pl-3" href="./support-ticket-detail.html"><span class="ml-1">Ticket Detail</span></a>
+                        <a class="nav-link pl-3" href="./support-faqs.html"><span class="ml-1">FAQs</span></a>
+                    </ul>
+                </li>
+            </ul>
+            <p class="text-muted nav-heading mt-4 mb-1"><span>Extra</span></p>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item dropdown"><a href="#pages" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-file fe-16"></i><span class="ml-3 item-text">Pages</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="pages">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-orders.html"><span class="ml-1 item-text">Orders</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-timeline.html"><span class="ml-1 item-text">Timeline</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-invoice.html"><span class="ml-1 item-text">Invoice</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-404.html"><span class="ml-1 item-text">Page 404</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-500.html"><span class="ml-1 item-text">Page 500</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-blank.html"><span class="ml-1 item-text">Blank</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#auth" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-shield fe-16"></i><span class="ml-3 item-text">Authentication</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="auth">
+                        <a class="nav-link pl-3" href="./auth-login.html"><span class="ml-1">Login 1</span></a>
+                        <a class="nav-link pl-3" href="./auth-login-half.html"><span class="ml-1">Login 2</span></a>
+                        <a class="nav-link pl-3" href="./auth-register.html"><span class="ml-1">Register</span></a>
+                        <a class="nav-link pl-3" href="./auth-resetpw.html"><span class="ml-1">Reset Password</span></a>
+                        <a class="nav-link pl-3" href="./auth-confirm.html"><span class="ml-1">Confirm Password</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#layouts" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-layout fe-16"></i><span class="ml-3 item-text">Layout</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="layouts">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index-horizontal.html"><span class="ml-1 item-text">Top Navigation</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index-boxed.html"><span class="ml-1 item-text">Boxed</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <!-- MAIN CONTENT - REQUEST BARANG -->
+    <main role="main" class="main-content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="row align-items-center my-4">
+                        <div class="col">
+                            <h2 class="mb-0" style="color: #1e3c72;">Request Barang (NOC)</h2>
+                            <p class="text-muted mt-1">Pilih barang yang dibutuhkan. Jika stok kosong, ajukan RAB (Rencana Anggaran Biaya).</p>
+                        </div>
+                        <div class="col-auto">
+                            <div class="cart-icon" id="cartIcon">
+                                <i class="fe fe-shopping-cart"></i>
+                                <span class="cart-count" id="cartCount">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Search & Filter -->
+                    <div class="search-filter">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 mb-2 mb-md-0">
+                                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Cari nama barang atau kode...">
+                            </div>
+                            <div class="col-md-6">
+                                <select class="filter-select" id="filterKategori">
+                                    <option value="all">📂 Semua Kategori</option>
+                                    <option value="Elektronik">⚡ Elektronik</option>
+                                    <option value="Aksesoris">🔌 Aksesoris</option>
+                                    <option value="Komputer">💻 Komputer</option>
+                                    <option value="Storage">💾 Storage</option>
+                                    <option value="Audio">🎵 Audio</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Katalog Grid -->
+                    <div class="katalog-grid" id="katalogGrid"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h5><i class="fe fe-shopping-cart"></i> Keranjang Request</h5>
+            <button class="close-cart" id="closeCartBtn">&times;</button>
+        </div>
+        <div class="cart-body" id="cartBody">
+            <div class="cart-empty">
+                <i class="fe fe-shopping-cart" style="font-size: 48px;"></i>
+                <p class="mt-2">Keranjang masih kosong</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total"><span>Total Item:</span><span id="totalItems">0</span></div>
+            <div class="cart-total"><span>Estimasi Total:</span><span id="totalEstimasi">Rp 0</span></div>
+            <button class="btn-submit-request" id="submitRequestBtn">
+                <i class="fe fe-send"></i> Kirim Request ke Admin
+            </button>
+        </div>
+    </div>
+    
+    <!-- Modal RAB -->
+    <div class="modal fade" id="modalRAB" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-header" style="background: linear-gradient(135deg, #dc3545, #c82333);">
+                    <h5 class="modal-title text-white"><i class="fe fe-file-text"></i> Form RAB Pengajuan Barang</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="fe fe-alert-triangle"></i> <strong>Stok Habis!</strong> Silakan ajukan permintaan pembelian melalui form RAB berikut.
+                    </div>
+                    <div class="rab-summary">
+                        <h6 class="mb-3">Detail Barang</h6>
+                        <div class="row mb-2"><div class="col-4 text-muted">Kode Barang</div><div class="col-8 fw-bold" id="rabKode">-</div></div>
+                        <div class="row mb-2"><div class="col-4 text-muted">Nama Barang</div><div class="col-8 fw-bold" id="rabNama">-</div></div>
+                        <div class="row mb-2"><div class="col-4 text-muted">Kategori</div><div class="col-8" id="rabKategori">-</div></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><div class="form-group"><label>Jumlah dibutuhkan</label><input type="number" class="form-control" id="rabJumlah" value="1" min="1"></div></div>
+                        <div class="col-md-6"><div class="form-group"><label>Estimasi Harga</label><input type="text" class="form-control" id="rabHarga" readonly style="background:#e9ecef;"></div></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><div class="form-group"><label>Total Estimasi</label><input type="text" class="form-control" id="rabTotal" readonly style="background:#e9ecef; color:#28a745;"></div></div>
+                        <div class="col-md-6"><div class="form-group"><label>Prioritas</label><select class="form-control" id="rabPrioritas"><option value="Tinggi">🔥 Tinggi</option><option value="Sedang" selected>🟡 Sedang</option><option value="Rendah">🔵 Rendah</option></select></div></div>
+                    </div>
+                    <div class="form-group"><label>Alasan Pengajuan</label><textarea class="form-control" rows="2" id="rabAlasan" placeholder="Jelaskan alasan..."></textarea></div>
+                    <div class="form-group"><label>Supplier Rekomendasi</label><input type="text" class="form-control" id="rabSupplier" placeholder="Nama supplier"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger" id="submitRABBtn">Ajukan RAB</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Success -->
+    <div class="modal fade" id="modalSuccess" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content text-center p-4" style="border-radius: 20px;">
+                <i class="fe fe-check-circle" style="font-size: 64px; color: #28a745;"></i>
+                <h5 class="mt-3">Request Berhasil Dikirim!</h5>
+                <p class="text-muted">Admin akan segera memproses request Anda.</p>
+                <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal RAB Success -->
+    <div class="modal fade" id="modalRABSuccess" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content text-center p-4" style="border-radius: 20px;">
+                <i class="fe fe-file-text" style="font-size: 64px; color: #dc3545;"></i>
+                <h5 class="mt-3">RAB Berhasil Diajukan!</h5>
+                <p class="text-muted">Pengajuan RAB telah dikirim ke admin.</p>
+                <button class="btn btn-danger" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/simplebar.min.js"></script>
+    <script src="js/jquery.dataTables.min.js"></script>
+    <script src="js/dataTables.bootstrap4.min.js"></script>
+    <script src="js/apps.js"></script>
+    
+    <script>
+    $(document).ready(function() {
+        // Ambil data dari localStorage
+        let gudangItems = JSON.parse(localStorage.getItem('gudangItems') || '[]');
+        
+        if (gudangItems.length === 0) {
+            gudangItems = [
+                { kode: "BRG-001", nama: "Kabel HDMI 2m", kategori: "Aksesoris", hargaBeli: 25000, hargaJual: 35000, stok: 150, satuan: "Pcs", supplier: "PT Elektronik Jaya" },
+                { kode: "BRG-002", nama: "Mouse Wireless", kategori: "Elektronik", hargaBeli: 120000, hargaJual: 150000, stok: 75, satuan: "Pcs", supplier: "PT Logitech" },
+                { kode: "BRG-003", nama: "Keyboard Mechanical", kategori: "Elektronik", hargaBeli: 350000, hargaJual: 450000, stok: 10, satuan: "Pcs", supplier: "PT Razer" },
+                { kode: "BRG-004", nama: "Monitor 24 Inch", kategori: "Elektronik", hargaBeli: 1200000, hargaJual: 1500000, stok: 45, satuan: "Unit", supplier: "PT Samsung" },
+                { kode: "BRG-005", nama: "SSD 512GB", kategori: "Storage", hargaBeli: 850000, hargaJual: 1000000, stok: 0, satuan: "Pcs", supplier: "PT Western Digital" },
+                { kode: "BRG-006", nama: "RAM 16GB DDR5", kategori: "Komputer", hargaBeli: 750000, hargaJual: 950000, stok: 30, satuan: "Pcs", supplier: "PT Corsair" },
+                { kode: "BRG-007", nama: "Webcam 4K", kategori: "Aksesoris", hargaBeli: 450000, hargaJual: 650000, stok: 0, satuan: "Pcs", supplier: "PT Logitech" }
+            ];
+            localStorage.setItem('gudangItems', JSON.stringify(gudangItems));
+        }
+        
+        let cart = [];
+        let currentRABItem = null;
+        
+        function renderKatalog() {
+            let searchVal = $('#searchInput').val().toLowerCase();
+            let kategoriVal = $('#filterKategori').val();
+            let filtered = gudangItems.filter(item => {
+                let matchSearch = item.nama.toLowerCase().includes(searchVal) || item.kode.toLowerCase().includes(searchVal);
+                let matchKategori = kategoriVal === 'all' || item.kategori === kategoriVal;
+                return matchSearch && matchKategori;
+            });
+            
+            let html = '';
+            filtered.forEach(item => {
+                let badgeClass = item.stok === 0 ? 'badge-kosong' : (item.stok < 15 ? 'badge-sedikit' : 'badge-tersedia');
+                let badgeText = item.stok === 0 ? 'KOSONG' : (item.stok < 15 ? `SISA ${item.stok}` : 'TERSEDIA');
+                let buttonHtml = item.stok === 0 ? 
+                    `<button class="btn-rab" data-item='${JSON.stringify(item)}'><i class="fe fe-file-text"></i> Ajukan RAB</button>` :
+                    `<button class="btn-request" data-item='${JSON.stringify(item)}'><i class="fe fe-plus"></i> Request Barang</button>`;
+                
+                html += `<div class="katalog-card">
+                            <div class="card-badge ${badgeClass}">${badgeText}</div>
+                            <div class="card-icon"><i class="fe fe-package"></i></div>
+                            <div class="card-body">
+                                <div class="card-title">${item.nama}</div>
+                                <div class="card-code">${item.kode} | ${item.kategori}</div>
+                                <div class="card-price">Rp ${item.hargaJual.toLocaleString('id-ID')}</div>
+                                <div class="card-stok">Stok: ${item.stok} ${item.satuan}</div>
+                                ${buttonHtml}
+                            </div>
+                        </div>`;
+            });
+            $('#katalogGrid').html(html || '<div class="text-center py-5">Tidak ada barang</div>');
+        }
+        
+        function updateCartUI() {
+            if (cart.length === 0) {
+                $('#cartBody').html('<div class="cart-empty"><i class="fe fe-shopping-cart" style="font-size: 48px;"></i><p class="mt-2">Keranjang masih kosong</p></div>');
+                $('#totalItems').text('0');
+                $('#totalEstimasi').text('Rp 0');
+                $('#cartCount').text('0');
+                return;
+            }
+            let html = '', total = 0, totalQty = 0;
+            cart.forEach((item, idx) => {
+                let subtotal = item.jumlah * item.hargaJual;
+                total += subtotal;
+                totalQty += item.jumlah;
+                html += `<div class="cart-item">
+                            <div class="cart-item-info">
+                                <h6>${item.nama}</h6>
+                                <p>${item.kode} | Rp ${item.hargaJual.toLocaleString()} x ${item.jumlah}</p>
+                            </div>
+                            <div>
+                                <span class="me-2">Rp ${subtotal.toLocaleString()}</span>
+                                <button class="remove-item" data-idx="${idx}"><i class="fe fe-trash-2"></i></button>
+                            </div>
+                        </div>`;
+            });
+            $('#cartBody').html(html);
+            $('#totalItems').text(totalQty);
+            $('#totalEstimasi').text('Rp ' + total.toLocaleString('id-ID'));
+            $('#cartCount').text(cart.length);
+        }
+        
+        $(document).on('click', '.btn-request', function() {
+            let item = $(this).data('item');
+            let existing = cart.find(i => i.kode === item.kode);
+            if (existing) existing.jumlah++;
+            else cart.push({ kode: item.kode, nama: item.nama, hargaJual: item.hargaJual, satuan: item.satuan, jumlah: 1 });
+            updateCartUI();
+            $(this).html('<i class="fe fe-check"></i> Ditambahkan');
+            setTimeout(() => $(this).html('<i class="fe fe-plus"></i> Request Barang'), 1000);
+        });
+        
+        $(document).on('click', '.btn-rab', function() {
+            currentRABItem = $(this).data('item');
+            $('#rabKode').text(currentRABItem.kode);
+            $('#rabNama').text(currentRABItem.nama);
+            $('#rabKategori').text(currentRABItem.kategori);
+            $('#rabHarga').val('Rp ' + currentRABItem.hargaJual.toLocaleString('id-ID'));
+            $('#rabJumlah').val(1);
+            $('#rabTotal').val('Rp ' + currentRABItem.hargaJual.toLocaleString('id-ID'));
+            $('#rabAlasan, #rabSupplier').val('');
+            $('#modalRAB').modal('show');
+        });
+        
+        $('#rabJumlah').on('input', function() {
+            let jumlah = parseInt($(this).val()) || 1;
+            let harga = currentRABItem ? currentRABItem.hargaJual : 0;
+            $('#rabTotal').val('Rp ' + (jumlah * harga).toLocaleString('id-ID'));
+        });
+        
+        $('#submitRABBtn').click(function() {
+            if (!currentRABItem) return;
+            let rabData = {
+                id: 'RAB-' + Date.now(),
+                tanggal: new Date().toLocaleString('id-ID'),
+                kodeBarang: currentRABItem.kode,
+                namaBarang: currentRABItem.nama,
+                jumlah: parseInt($('#rabJumlah').val()) || 1,
+                total: (parseInt($('#rabJumlah').val()) || 1) * currentRABItem.hargaJual,
+                prioritas: $('#rabPrioritas').val(),
+                alasan: $('#rabAlasan').val(),
+                supplierRekomendasi: $('#rabSupplier').val(),
+                status: 'menunggu',
+                diajukanOleh: 'NOC'
+            };
+            let rabList = JSON.parse(localStorage.getItem('rabList') || '[]');
+            rabList.unshift(rabData);
+            localStorage.setItem('rabList', JSON.stringify(rabList));
+            $('#modalRAB').modal('hide');
+            $('#modalRABSuccess').modal('show');
+        });
+        
+        $(document).on('click', '.remove-item', function() {
+            cart.splice($(this).data('idx'), 1);
+            updateCartUI();
+        });
+        
+        $('#submitRequestBtn').click(function() {
+            if (cart.length === 0) { alert('Keranjang masih kosong!'); return; }
+            let requestData = {
+                id: 'REQ-' + Date.now(),
+                tanggal: new Date().toLocaleString('id-ID'),
+                items: cart.map(item => ({...item})),
+                totalItem: cart.reduce((s, i) => s + i.jumlah, 0),
+                totalEstimasi: cart.reduce((s, i) => s + (i.jumlah * i.hargaJual), 0),
+                status: 'menunggu',
+                diajukanOleh: 'NOC'
+            };
+            let requestList = JSON.parse(localStorage.getItem('requestList') || '[]');
+            requestList.unshift(requestData);
+            localStorage.setItem('requestList', JSON.stringify(requestList));
+            cart = [];
+            updateCartUI();
+            $('#cartSidebar, #cartOverlay').removeClass('show');
+            $('#modalSuccess').modal('show');
+        });
+        
+        $('#cartIcon').click(() => { $('#cartSidebar, #cartOverlay').addClass('show'); });
+        $('#closeCartBtn, #cartOverlay').click(() => { $('#cartSidebar, #cartOverlay').removeClass('show'); });
+        $('#searchInput, #filterKategori').on('input change', () => renderKatalog());
+        
+        renderKatalog();
+    });
+    </script>
+</body>
+</html>

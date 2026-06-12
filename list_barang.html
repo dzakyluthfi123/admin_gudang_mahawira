@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>List Barang - Admin Gudang Mahawira</title>
+    <!-- Simple bar CSS -->
+    <link rel="stylesheet" href="css/simplebar.css">
+    <!-- Fonts CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!-- Icons CSS -->
+    <link rel="stylesheet" href="css/feather.css">
+    <link rel="stylesheet" href="css/select2.css">
+    <link rel="stylesheet" href="css/dropzone.css">
+    <link rel="stylesheet" href="css/uppy.min.css">
+    <link rel="stylesheet" href="css/jquery.steps.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/quill.snow.css">
+    <link rel="stylesheet" href="css/daterangepicker.css">
+    <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
+    <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
+    
+    <style>
+        .main-content { background: #f8f9fc; }
+        
+        .btn-add {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn-add:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(30,60,114,0.3); color: white; }
+        
+        .btn-edit { background: #4caf50; border: none; padding: 4px 12px; border-radius: 6px; color: white; font-size: 12px; }
+        .btn-edit:hover { background: #45a049; color: white; }
+        .btn-delete { background: #f44336; border: none; padding: 4px 12px; border-radius: 6px; color: white; font-size: 12px; }
+        .btn-delete:hover { background: #da190b; color: white; }
+        .btn-purchase { background: #ff9800; border: none; padding: 4px 12px; border-radius: 6px; color: white; font-size: 12px; }
+        .btn-purchase:hover { background: #e68900; color: white; }
+        .btn-request { background: #6f42c1; border: none; padding: 4px 12px; border-radius: 6px; color: white; font-size: 12px; }
+        .btn-request:hover { background: #5a32a3; color: white; }
+        
+        .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .btn-edit, .btn-delete, .btn-purchase, .btn-request { margin: 0; white-space: nowrap; }
+        
+        /* Badge untuk jenis barang */
+        .badge-lama {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .badge-baru {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .badge-stok { background: #e8f5e9; color: #2e7d32; padding: 5px 10px; border-radius: 20px; font-size: 12px; display: inline-block; }
+        .badge-stok-render { background: #fff3e0; color: #e65100; padding: 5px 10px; border-radius: 20px; font-size: 12px; display: inline-block; }
+        .badge-stok-habis { background: #ffebee; color: #c62828; padding: 5px 10px; border-radius: 20px; font-size: 12px; display: inline-block; }
+        
+        .table th { border-top: none; font-weight: 600; color: #1e3c72; background: #f8f9fc; }
+        .card { border-radius: 12px; border: none; }
+        h2 { color: #1e3c72; }
+        
+        /* Statistik card */
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            height: 100%;
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .stat-number { font-size: 28px; font-weight: 700; color: #1e3c72; line-height: 1.2; }
+        .stat-label { font-size: 13px; color: #6c757d; margin-top: 5px; }
+        
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .filter-tab {
+            padding: 6px 18px;
+            border-radius: 30px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-tab:hover {
+            border-color: #2a5298;
+            color: #2a5298;
+        }
+        .filter-tab.active {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .fade-out-row { animation: fadeOut 0.4s ease-out forwards; }
+        @keyframes fadeOut { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; transform: translateX(-20px); display: none; } }
+        
+        @media (max-width: 768px) {
+            .table-responsive { overflow-x: auto; }
+            .action-buttons { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .btn-edit, .btn-delete, .btn-purchase, .btn-request { width: 100%; text-align: center; }
+            .filter-tabs { justify-content: center; }
+            .stat-number { font-size: 22px; }
+        }
+    </style>
+</head>
+<body class="vertical light">
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="topnav navbar navbar-light bg-white">
+        <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar">
+            <i class="fe fe-menu navbar-toggler-icon"></i>
+        </button>
+        <form class="form-inline mr-auto searchform text-muted">
+            <input class="form-control mr-sm-2 bg-transparent border-0 pl-4 text-muted" type="search" placeholder="Type something...">
+        </form>
+        <ul class="nav">
+            <li class="nav-item"><a class="nav-link text-muted my-2" href="#" id="modeSwitcher" data-mode="light"><i class="fe fe-sun fe-16"></i></a></li>
+            <li class="nav-item"><a class="nav-link text-muted my-2" href="./#" data-toggle="modal" data-target=".modal-shortcut"><span class="fe fe-grid fe-16"></span></a></li>
+            <li class="nav-item nav-notif"><a class="nav-link text-muted my-2" href="./#" data-toggle="modal" data-target=".modal-notif"><span class="fe fe-bell fe-16"></span><span class="dot dot-md bg-success"></span></a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown">
+                    <span class="avatar avatar-sm mt-2"><img src="./assets/avatars/face-1.jpg" alt="..." class="avatar-img rounded-circle"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#">Profile</a><a class="dropdown-item" href="#">Settings</a><a class="dropdown-item" href="#">Activities</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar-left border-right bg-white shadow" id="leftSidebar" data-simplebar>
+        <a href="#" class="btn collapseSidebar toggle-btn d-lg-none text-muted ml-2 mt-3" data-toggle="toggle"><i class="fe fe-x"></i></a>
+        <nav class="vertnav navbar navbar-light">
+            <div class="w-100 mb-4 d-flex"><a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="./index.html"><img id="logo" class="navbar-brand-img brand-sm" src="assets/images/logo_mahawira.png" alt="Logo"></a></div>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item dropdown">
+                    <a href="#dashboard" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-home fe-16"></i><span class="ml-3 item-text">Dashboard</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="dashboard">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-analytics.html"><span class="ml-1 item-text">Analytics</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./data_barang.html"><span class="ml-1 item-text">Data Barang</span></a></li>
+                        <li class="nav-item active"><a class="nav-link pl-3" href="./list_barang.html"><span class="ml-1 item-text">List Barang</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./katalog_online.html"><span class="ml-1 item-text">Katalog Online</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./pengajuan_pembelian.html"><span class="ml-1 item-text">Pengajuan Pembelian</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./scan_barang.html"><span class="ml-1 item-text">Input & Scan Barang</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./noc_request_barang.html"><span class="ml-1 item-text">Request Barang</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-saas.html"><span class="ml-1 item-text">Saas Dashboard</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-system.html"><span class="ml-1 item-text">Systems</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="text-muted nav-heading mt-4 mb-1"><span>Components</span></p>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item dropdown"><a href="#ui-elements" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-box fe-16"></i><span class="ml-3 item-text">UI elements</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="ui-elements">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-color.html"><span class="ml-1 item-text">Colors</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-typograpy.html"><span class="ml-1 item-text">Typograpy</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-icons.html"><span class="ml-1 item-text">Icons</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-buttons.html"><span class="ml-1 item-text">Buttons</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-notification.html"><span class="ml-1 item-text">Notifications</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-modals.html"><span class="ml-1 item-text">Modals</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-tabs-accordion.html"><span class="ml-1 item-text">Tabs & Accordion</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-progress.html"><span class="ml-1 item-text">Progress</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item w-100"><a class="nav-link" href="widgets.html"><i class="fe fe-layers fe-16"></i><span class="ml-3 item-text">Widgets</span><span class="badge badge-pill badge-primary">New</span></a></li>
+                <li class="nav-item dropdown"><a href="#forms" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-credit-card fe-16"></i><span class="ml-3 item-text">Forms</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="forms">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_elements.html"><span class="ml-1 item-text">Basic Elements</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_advanced.html"><span class="ml-1 item-text">Advanced Elements</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_validation.html"><span class="ml-1 item-text">Validation</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_wizard.html"><span class="ml-1 item-text">Wizard</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_layouts.html"><span class="ml-1 item-text">Layouts</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_upload.html"><span class="ml-1 item-text">File upload</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#tables" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-grid fe-16"></i><span class="ml-3 item-text">Tables</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="tables">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./table_basic.html"><span class="ml-1 item-text">Basic Tables</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./table_advanced.html"><span class="ml-1 item-text">Advanced Tables</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./table_datatables.html"><span class="ml-1 item-text">Data Tables</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#charts" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-pie-chart fe-16"></i><span class="ml-3 item-text">Charts</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="charts">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./chart-inline.html"><span class="ml-1 item-text">Inline Chart</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./chart-chartjs.html"><span class="ml-1 item-text">Chartjs</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./chart-apexcharts.html"><span class="ml-1 item-text">ApexCharts</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./datamaps.html"><span class="ml-1 item-text">Datamaps</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="text-muted nav-heading mt-4 mb-1"><span>Apps</span></p>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item w-100"><a class="nav-link" href="calendar.html"><i class="fe fe-calendar fe-16"></i><span class="ml-3 item-text">Calendar</span></a></li>
+                <li class="nav-item dropdown"><a href="#contact" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-book fe-16"></i><span class="ml-3 item-text">Contacts</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="contact">
+                        <a class="nav-link pl-3" href="./contacts-list.html"><span class="ml-1">Contact List</span></a>
+                        <a class="nav-link pl-3" href="./contacts-grid.html"><span class="ml-1">Contact Grid</span></a>
+                        <a class="nav-link pl-3" href="./contacts-new.html"><span class="ml-1">New Contact</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#profile" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-user fe-16"></i><span class="ml-3 item-text">Profile</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="profile">
+                        <a class="nav-link pl-3" href="./profile.html"><span class="ml-1">Overview</span></a>
+                        <a class="nav-link pl-3" href="./profile-settings.html"><span class="ml-1">Settings</span></a>
+                        <a class="nav-link pl-3" href="./profile-security.html"><span class="ml-1">Security</span></a>
+                        <a class="nav-link pl-3" href="./profile-notification.html"><span class="ml-1">Notifications</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#fileman" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-folder fe-16"></i><span class="ml-3 item-text">File Manager</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="fileman">
+                        <a class="nav-link pl-3" href="./files-list.html"><span class="ml-1">Files List</span></a>
+                        <a class="nav-link pl-3" href="./files-grid.html"><span class="ml-1">Files Grid</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#support" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-compass fe-16"></i><span class="ml-3 item-text">Help Desk</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="support">
+                        <a class="nav-link pl-3" href="./support-center.html"><span class="ml-1">Home</span></a>
+                        <a class="nav-link pl-3" href="./support-tickets.html"><span class="ml-1">Tickets</span></a>
+                        <a class="nav-link pl-3" href="./support-ticket-detail.html"><span class="ml-1">Ticket Detail</span></a>
+                        <a class="nav-link pl-3" href="./support-faqs.html"><span class="ml-1">FAQs</span></a>
+                    </ul>
+                </li>
+            </ul>
+            <p class="text-muted nav-heading mt-4 mb-1"><span>Extra</span></p>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item dropdown"><a href="#pages" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-file fe-16"></i><span class="ml-3 item-text">Pages</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="pages">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-orders.html"><span class="ml-1 item-text">Orders</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-timeline.html"><span class="ml-1 item-text">Timeline</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-invoice.html"><span class="ml-1 item-text">Invoice</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-404.html"><span class="ml-1 item-text">Page 404</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-500.html"><span class="ml-1 item-text">Page 500</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-blank.html"><span class="ml-1 item-text">Blank</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#auth" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-shield fe-16"></i><span class="ml-3 item-text">Authentication</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="auth">
+                        <a class="nav-link pl-3" href="./auth-login.html"><span class="ml-1">Login 1</span></a>
+                        <a class="nav-link pl-3" href="./auth-login-half.html"><span class="ml-1">Login 2</span></a>
+                        <a class="nav-link pl-3" href="./auth-register.html"><span class="ml-1">Register</span></a>
+                        <a class="nav-link pl-3" href="./auth-resetpw.html"><span class="ml-1">Reset Password</span></a>
+                        <a class="nav-link pl-3" href="./auth-confirm.html"><span class="ml-1">Confirm Password</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#layouts" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-layout fe-16"></i><span class="ml-3 item-text">Layout</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="layouts">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index-horizontal.html"><span class="ml-1 item-text">Top Navigation</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index-boxed.html"><span class="ml-1 item-text">Boxed</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <!-- MAIN CONTENT - LIST BARANG -->
+    <main role="main" class="main-content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="row align-items-center my-4">
+                        <div class="col">
+                            <h2 class="mb-0">List Barang Gudang</h2>
+                            <p class="text-muted">Daftar lengkap semua barang yang tersimpan di gudang</p>
+                        </div>
+                        <div class="col-auto">
+                            <a href="data_barang.html" class="btn btn-add">
+                                <i class="fe fe-arrow-left fe-12 mr-2"></i>Ke Data Barang
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Statistics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="stat-number" id="totalBarangCount">0</div>
+                                        <div class="stat-label">Total Barang</div>
+                                    </div>
+                                    <i class="fe fe-package fe-24 text-primary" style="opacity: 0.5;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="stat-number" id="totalStokCount">0</div>
+                                        <div class="stat-label">Total Stok</div>
+                                    </div>
+                                    <i class="fe fe-box fe-24 text-warning" style="opacity: 0.5;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="stat-number" id="stokHabisCount">0</div>
+                                        <div class="stat-label">Stok Habis</div>
+                                    </div>
+                                    <i class="fe fe-x-circle fe-24 text-danger" style="opacity: 0.5;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="stat-number" id="stokMenipisCount">0</div>
+                                        <div class="stat-label">Stok Menipis (&lt;15)</div>
+                                    </div>
+                                    <i class="fe fe-alert-triangle fe-24 text-warning" style="opacity: 0.5;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filter Tabs -->
+                    <div class="filter-tabs">
+                        <div class="filter-tab active" data-filter="all">📋 Semua Barang</div>
+                        <div class="filter-tab" data-filter="lama">📦 Barang Lama</div>
+                        <div class="filter-tab" data-filter="baru">🆕 Barang Baru</div>
+                    </div>
+                    
+                    <!-- Search Bar -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="searchBarang" placeholder="🔍 Cari kode, nama barang, atau supplier..." style="border-radius: 10px;">
+                        </div>
+                        <div class="col-md-6 text-md-right mt-2 mt-md-0">
+                            <button class="btn btn-outline-secondary btn-sm" id="resetFilterBtn">
+                                <i class="fe fe-refresh-ccw fe-12"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Table -->
+                    <div class="card shadow-sm">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Jenis</th>
+                                            <th>Kode Barang</th>
+                                            <th>Nama Barang</th>
+                                            <th>Kategori</th>
+                                            <th>Harga Beli</th>
+                                            <th>Harga Jual</th>
+                                            <th>Stok</th>
+                                            <th>Satuan</th>
+                                            <th>Supplier</th>
+                                            <th>Lokasi Rak</th>
+                                            <th>Tgl Masuk</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="listBarangTableBody"></tbody>
+                                </table>
+                            </div>
+                            <div class="row align-items-center p-3">
+                                <div class="col-md-6">
+                                    <p class="text-muted small mb-0" id="tableInfo"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <nav class="d-flex justify-content-end">
+                                        <ul class="pagination pagination-sm mb-0" id="paginationControls"></ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Modal Detail Barang -->
+    <div class="modal fade" id="modalDetailBarang" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-header" style="background: linear-gradient(135deg, #1e3c72, #2a5298);">
+                    <h5 class="modal-title text-white"><i class="fe fe-info fe-16 mr-2"></i>Detail Barang</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body p-4" id="detailBarangContent"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Notif & Shortcut -->
+    <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Notifications</h5><button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div><div class="modal-body"><div class="list-group list-group-flush my-n3"><div class="list-group-item bg-transparent"><div class="row align-items-center"><div class="col-auto"><span class="fe fe-box fe-24"></span></div><div class="col"><small><strong>Stok barang menipis</strong></small><div class="my-0 text-muted small">Keyboard Mechanical tersisa 10 pcs</div></div></div></div></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button></div></div></div></div>
+    <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Shortcuts</h5><button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div><div class="modal-body px-5"><div class="row align-items-center"><div class="col-6 text-center"><div class="squircle bg-success justify-content-center"><i class="fe fe-box fe-32 align-self-center text-white"></i></div><p>Data Barang</p></div><div class="col-6 text-center"><div class="squircle bg-primary justify-content-center"><i class="fe fe-arrow-down fe-32 align-self-center text-white"></i></div><p>Barang Masuk</p></div></div></div></div></div></div>
+    
+    <!-- Modal Success -->
+    <div class="modal fade" id="modalSuccess" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content text-center p-4" style="border-radius: 20px;">
+                <i class="fe fe-check-circle" style="font-size: 64px; color: #28a745;"></i>
+                <h5 class="mt-3" id="successMessage">Berhasil!</h5>
+                <button class="btn btn-primary mt-3" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/simplebar.min.js"></script>
+    <script src="js/jquery.dataTables.min.js"></script>
+    <script src="js/dataTables.bootstrap4.min.js"></script>
+    <script src="js/apps.js"></script>
+    
+    <script>
+    $(document).ready(function() {
+        // ==================== AMBIL DATA DARI LOCALSTORAGE ====================
+        let gudangItems = JSON.parse(localStorage.getItem('gudangItems') || '[]');
+        
+        // Data dummy jika kosong
+        if (gudangItems.length === 0) {
+            let today = new Date();
+            let weekAgo = new Date(today);
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            let monthAgo = new Date(today);
+            monthAgo.setDate(monthAgo.getDate() - 30);
+            let twoMonthsAgo = new Date(today);
+            twoMonthsAgo.setDate(twoMonthsAgo.getDate() - 60);
+            
+            gudangItems = [
+                { kode: "BRG-001", nama: "Kabel HDMI 2m", kategori: "Aksesoris", hargaBeli: 25000, hargaJual: 35000, stok: 150, satuan: "Pcs", supplier: "PT Elektronik Jaya", lokasiRak: "A-01-01", deskripsi: "Kabel HDMI 2 meter", jenis: "lama", tanggalMasuk: twoMonthsAgo.toISOString().split('T')[0] },
+                { kode: "BRG-002", nama: "Mouse Wireless Logitech", kategori: "Elektronik", hargaBeli: 120000, hargaJual: 150000, stok: 75, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "B-02-03", deskripsi: "Mouse wireless", jenis: "lama", tanggalMasuk: twoMonthsAgo.toISOString().split('T')[0] },
+                { kode: "BRG-003", nama: "Keyboard Mechanical", kategori: "Elektronik", hargaBeli: 350000, hargaJual: 450000, stok: 10, satuan: "Pcs", supplier: "PT Razer Indonesia", lokasiRak: "B-02-05", deskripsi: "Keyboard mechanical RGB", jenis: "lama", tanggalMasuk: monthAgo.toISOString().split('T')[0] },
+                { kode: "BRG-004", nama: "Monitor 24 Inch", kategori: "Elektronik", hargaBeli: 1200000, hargaJual: 1500000, stok: 45, satuan: "Unit", supplier: "PT Samsung Electronics", lokasiRak: "C-03-01", deskripsi: "Monitor LED", jenis: "lama", tanggalMasuk: twoMonthsAgo.toISOString().split('T')[0] },
+                { kode: "BRG-005", nama: "SSD 512GB", kategori: "Storage", hargaBeli: 850000, hargaJual: 1000000, stok: 0, satuan: "Pcs", supplier: "PT Western Digital", lokasiRak: "D-04-02", deskripsi: "SSD NVMe 512GB", jenis: "lama", tanggalMasuk: monthAgo.toISOString().split('T')[0] },
+                { kode: "BRG-006", nama: "RAM 16GB DDR5", kategori: "Komputer", hargaBeli: 750000, hargaJual: 950000, stok: 30, satuan: "Pcs", supplier: "PT Corsair", lokasiRak: "D-04-06", deskripsi: "RAM DDR5 16GB 5200MHz", jenis: "baru", tanggalMasuk: weekAgo.toISOString().split('T')[0] },
+                { kode: "BRG-007", nama: "Webcam 4K", kategori: "Aksesoris", hargaBeli: 450000, hargaJual: 650000, stok: 15, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "A-01-10", deskripsi: "Webcam 4K Ultra HD", jenis: "baru", tanggalMasuk: weekAgo.toISOString().split('T')[0] },
+                { kode: "BRG-008", nama: "Soundbar", kategori: "Audio", hargaBeli: 800000, hargaJual: 1200000, stok: 8, satuan: "Unit", supplier: "PT JBL Indonesia", lokasiRak: "E-05-03", deskripsi: "Soundbar 2.1 channel", jenis: "baru", tanggalMasuk: today.toISOString().split('T')[0] }
+            ];
+            localStorage.setItem('gudangItems', JSON.stringify(gudangItems));
+        }
+        
+        let currentFilter = "all";
+        let currentPage = 1;
+        let rowsPerPage = 10;
+        let searchTerm = "";
+        
+        function updateStatistics() {
+            let total = gudangItems.length;
+            let totalStok = gudangItems.reduce((sum, item) => sum + item.stok, 0);
+            let stokHabis = gudangItems.filter(item => item.stok === 0).length;
+            let stokMenipis = gudangItems.filter(item => item.stok > 0 && item.stok < 15).length;
+            
+            $('#totalBarangCount').text(total);
+            $('#totalStokCount').text(totalStok);
+            $('#stokHabisCount').text(stokHabis);
+            $('#stokMenipisCount').text(stokMenipis);
+        }
+        
+        function getFilteredItems() {
+            let filtered = [...gudangItems];
+            
+            if (currentFilter === "lama") {
+                filtered = filtered.filter(item => item.jenis === "lama");
+            } else if (currentFilter === "baru") {
+                filtered = filtered.filter(item => item.jenis === "baru");
+            }
+            
+            if (searchTerm !== "") {
+                filtered = filtered.filter(item => 
+                    item.kode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.supplier.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+            
+            return filtered;
+        }
+        
+        function renderListBarang() {
+            let filtered = getFilteredItems();
+            let totalItems = filtered.length;
+            let totalPages = Math.ceil(totalItems / rowsPerPage);
+            
+            if (currentPage > totalPages) currentPage = 1;
+            if (currentPage < 1) currentPage = 1;
+            
+            let start = (currentPage - 1) * rowsPerPage;
+            let end = start + rowsPerPage;
+            let pageData = filtered.slice(start, end);
+            
+            let html = '';
+            pageData.forEach((item, idx) => {
+                let stokBadge = '';
+                if(item.stok === 0) stokBadge = `<span class="badge-stok-habis">✗ ${item.stok}</span>`;
+                else if(item.stok < 15) stokBadge = `<span class="badge-stok-render">⚠ ${item.stok}</span>`;
+                else stokBadge = `<span class="badge-stok">✓ ${item.stok}</span>`;
+                
+                let jenisBadge = item.jenis === 'lama' 
+                    ? '<span class="badge-lama"><i class="fe fe-archive fe-10"></i> Lama</span>'
+                    : '<span class="badge-baru"><i class="fe fe-plus fe-10"></i> Baru</span>';
+                
+                html += `<tr>
+                            <td>${start + idx + 1}</td>
+                            <td>${jenisBadge}</td>
+                            <td><strong>${item.kode}</strong></td>
+                            <td>${item.nama}</td>
+                            <td>${item.kategori}</td>
+                            <td>Rp ${item.hargaBeli.toLocaleString('id-ID')}</td>
+                            <td>Rp ${item.hargaJual.toLocaleString('id-ID')}</td>
+                            <td>${stokBadge}</td>
+                            <td>${item.satuan}</td>
+                            <td>${item.supplier}</td>
+                            <td>${item.lokasiRak || '-'}</td>
+                            <td><small>${item.tanggalMasuk || '-'}</small></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-view btn-sm btn-detail-barang" data-kode="${item.kode}">
+                                        <i class="fe fe-eye fe-12"></i> Detail
+                                    </button>
+                                </div>
+                            </td>
+                          </tr>`;
+            });
+            
+            $('#listBarangTableBody').html(html);
+            
+            let startDisplay = totalItems === 0 ? 0 : start + 1;
+            let endDisplay = Math.min(end, totalItems);
+            $('#tableInfo').text(`Menampilkan ${startDisplay} sampai ${endDisplay} dari ${totalItems} data`);
+            
+            renderPagination(totalPages);
+            updateStatistics();
+        }
+        
+        function renderPagination(totalPages) {
+            let html = '';
+            html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                        <a class="page-link" href="#" data-page="prev">Sebelumnya</a>
+                    </li>`;
+            
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<li class="page-item ${currentPage === i ? 'active' : ''}">
+                            <a class="page-link" href="#" data-page="${i}">${i}</a>
+                        </li>`;
+            }
+            
+            html += `<li class="page-item ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''}">
+                        <a class="page-link" href="#" data-page="next">Berikutnya</a>
+                    </li>`;
+            
+            $('#paginationControls').html(html);
+        }
+        
+        // Event: Filter tabs
+        $('.filter-tab').click(function() {
+            $('.filter-tab').removeClass('active');
+            $(this).addClass('active');
+            currentFilter = $(this).data('filter');
+            currentPage = 1;
+            renderListBarang();
+        });
+        
+        // Event: Search
+        $('#searchBarang').on('keyup', function() {
+            searchTerm = $(this).val();
+            currentPage = 1;
+            renderListBarang();
+        });
+        
+        // Event: Reset filter
+        $('#resetFilterBtn').click(function() {
+            searchTerm = "";
+            $('#searchBarang').val('');
+            currentFilter = "all";
+            $('.filter-tab').removeClass('active');
+            $('.filter-tab[data-filter="all"]').addClass('active');
+            currentPage = 1;
+            renderListBarang();
+        });
+        
+        // Event: Pagination
+        $(document).on('click', '.page-link', function(e) {
+            e.preventDefault();
+            let page = $(this).data('page');
+            let totalPages = Math.ceil(getFilteredItems().length / rowsPerPage);
+            
+            if (page === 'prev') {
+                if (currentPage > 1) currentPage--;
+            } else if (page === 'next') {
+                if (currentPage < totalPages) currentPage++;
+            } else {
+                currentPage = parseInt(page);
+            }
+            renderListBarang();
+        });
+        
+        // Event: Detail Barang
+        $(document).on('click', '.btn-detail-barang', function() {
+            let kode = $(this).data('kode');
+            let item = gudangItems.find(i => i.kode === kode);
+            if (item) {
+                let stokBadge = '';
+                if(item.stok === 0) stokBadge = `<span class="badge-stok-habis">Stok Habis</span>`;
+                else if(item.stok < 15) stokBadge = `<span class="badge-stok-render">Stok Menipis (${item.stok})</span>`;
+                else stokBadge = `<span class="badge-stok">Stok: ${item.stok}</span>`;
+                
+                let jenisText = item.jenis === 'lama' ? 'Barang Lama' : 'Barang Baru';
+                
+                $('#detailBarangContent').html(`
+                    <div class="detail-grid">
+                        <div class="detail-item"><small class="text-muted">Kode Barang</small><div class="fw-bold">${item.kode}</div></div>
+                        <div class="detail-item"><small class="text-muted">Nama Barang</small><div class="fw-bold">${item.nama}</div></div>
+                        <div class="detail-item"><small class="text-muted">Kategori</small><div>${item.kategori}</div></div>
+                        <div class="detail-item"><small class="text-muted">Jenis</small><div>${jenisText}</div></div>
+                        <div class="detail-item"><small class="text-muted">Harga Beli</small><div>Rp ${item.hargaBeli.toLocaleString('id-ID')}</div></div>
+                        <div class="detail-item"><small class="text-muted">Harga Jual</small><div>Rp ${item.hargaJual.toLocaleString('id-ID')}</div></div>
+                        <div class="detail-item"><small class="text-muted">Stok</small><div>${stokBadge}</div></div>
+                        <div class="detail-item"><small class="text-muted">Satuan</small><div>${item.satuan}</div></div>
+                        <div class="detail-item"><small class="text-muted">Supplier</small><div>${item.supplier}</div></div>
+                        <div class="detail-item"><small class="text-muted">Lokasi Rak</small><div>${item.lokasiRak || '-'}</div></div>
+                        <div class="detail-item"><small class="text-muted">Tanggal Masuk</small><div>${item.tanggalMasuk || '-'}</div></div>
+                        <div class="detail-item full-width"><small class="text-muted">Deskripsi</small><div class="mt-1">${item.deskripsi || '-'}</div></div>
+                    </div>
+                `);
+                $('#modalDetailBarang').modal('show');
+            }
+        });
+        
+        // Initial render
+        renderListBarang();
+    });
+    </script>
+</body>
+</html>

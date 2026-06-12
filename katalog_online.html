@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Katalog Online - Admin Gudang Mahawira</title>
+    <link rel="stylesheet" href="css/simplebar.css">
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/feather.css">
+    <link rel="stylesheet" href="css/select2.css">
+    <link rel="stylesheet" href="css/dropzone.css">
+    <link rel="stylesheet" href="css/uppy.min.css">
+    <link rel="stylesheet" href="css/jquery.steps.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/quill.snow.css">
+    <link rel="stylesheet" href="css/daterangepicker.css">
+    <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
+    <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
+    
+    <style>
+        .main-content { background: #f8f9fc; }
+        
+        .btn-add {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: none;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+        .btn-edit { background: #4caf50; border: none; padding: 4px 12px; border-radius: 6px; color: white; font-size: 12px; }
+        .btn-delete { background: #f44336; border: none; padding: 4px 12px; border-radius: 6px; color: white; font-size: 12px; }
+        
+        .table th { background: #f8f9fc; color: #1e3c72; font-weight: 600; }
+        .card { border-radius: 12px; border: none; }
+        h2 { color: #1e3c72; }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .stat-number { font-size: 28px; font-weight: 700; color: #1e3c72; }
+        
+        @media (max-width: 768px) {
+            .table-responsive { overflow-x: auto; }
+        }
+    </style>
+</head>
+<body class="vertical light">
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="topnav navbar navbar-light bg-white">
+        <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar">
+            <i class="fe fe-menu navbar-toggler-icon"></i>
+        </button>
+        <form class="form-inline mr-auto searchform text-muted">
+            <input class="form-control mr-sm-2 bg-transparent border-0 pl-4 text-muted" type="search" placeholder="Type something...">
+        </form>
+        <ul class="nav">
+            <li class="nav-item"><a class="nav-link text-muted my-2" href="#" id="modeSwitcher" data-mode="light"><i class="fe fe-sun fe-16"></i></a></li>
+            <li class="nav-item"><a class="nav-link text-muted my-2" href="./#" data-toggle="modal" data-target=".modal-shortcut"><span class="fe fe-grid fe-16"></span></a></li>
+            <li class="nav-item nav-notif"><a class="nav-link text-muted my-2" href="./#" data-toggle="modal" data-target=".modal-notif"><span class="fe fe-bell fe-16"></span><span class="dot dot-md bg-success"></span></a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown">
+                    <span class="avatar avatar-sm mt-2"><img src="./assets/avatars/face-1.jpg" alt="..." class="avatar-img rounded-circle"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#">Profile</a><a class="dropdown-item" href="#">Settings</a><a class="dropdown-item" href="#">Activities</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar-left border-right bg-white shadow" id="leftSidebar" data-simplebar>
+        <a href="#" class="btn collapseSidebar toggle-btn d-lg-none text-muted ml-2 mt-3" data-toggle="toggle"><i class="fe fe-x"></i></a>
+        <nav class="vertnav navbar navbar-light">
+            <div class="w-100 mb-4 d-flex"><a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="./index.html"><img id="logo" class="navbar-brand-img brand-sm" src="assets/images/logo_mahawira.png" alt="Logo"></a></div>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item dropdown">
+                    <a href="#dashboard" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-home fe-16"></i><span class="ml-3 item-text">Dashboard</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="dashboard">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-analytics.html"><span class="ml-1 item-text">Analytics</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./data_barang.html"><span class="ml-1 item-text">Data Barang</span></a></li>
+                        <li class="nav-item active"><a class="nav-link pl-3" href="./katalog_online.html"><span class="ml-1 item-text">Katalog Online</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./pengajuan_pembelian.html"><span class="ml-1 item-text">Pengajuan Pembelian</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./scan_barang.html"><span class="ml-1 item-text">Input & Scan Barang</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./noc_request_barang.html"><span class="ml-1 item-text">Request Barang</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="text-muted nav-heading mt-4 mb-1"><span>Components</span></p>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item dropdown"><a href="#ui-elements" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-box fe-16"></i><span class="ml-3 item-text">UI elements</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="ui-elements">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-color.html"><span class="ml-1 item-text">Colors</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-typograpy.html"><span class="ml-1 item-text">Typograpy</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-icons.html"><span class="ml-1 item-text">Icons</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-buttons.html"><span class="ml-1 item-text">Buttons</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-notification.html"><span class="ml-1 item-text">Notifications</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-modals.html"><span class="ml-1 item-text">Modals</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-tabs-accordion.html"><span class="ml-1 item-text">Tabs & Accordion</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./ui-progress.html"><span class="ml-1 item-text">Progress</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item w-100"><a class="nav-link" href="widgets.html"><i class="fe fe-layers fe-16"></i><span class="ml-3 item-text">Widgets</span><span class="badge badge-pill badge-primary">New</span></a></li>
+                <li class="nav-item dropdown"><a href="#forms" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-credit-card fe-16"></i><span class="ml-3 item-text">Forms</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="forms">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_elements.html"><span class="ml-1 item-text">Basic Elements</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_advanced.html"><span class="ml-1 item-text">Advanced Elements</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_validation.html"><span class="ml-1 item-text">Validation</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_wizard.html"><span class="ml-1 item-text">Wizard</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_layouts.html"><span class="ml-1 item-text">Layouts</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./form_upload.html"><span class="ml-1 item-text">File upload</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#tables" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-grid fe-16"></i><span class="ml-3 item-text">Tables</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="tables">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./table_basic.html"><span class="ml-1 item-text">Basic Tables</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./table_advanced.html"><span class="ml-1 item-text">Advanced Tables</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./table_datatables.html"><span class="ml-1 item-text">Data Tables</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#charts" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-pie-chart fe-16"></i><span class="ml-3 item-text">Charts</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="charts">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./chart-inline.html"><span class="ml-1 item-text">Inline Chart</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./chart-chartjs.html"><span class="ml-1 item-text">Chartjs</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./chart-apexcharts.html"><span class="ml-1 item-text">ApexCharts</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./datamaps.html"><span class="ml-1 item-text">Datamaps</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="text-muted nav-heading mt-4 mb-1"><span>Apps</span></p>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item w-100"><a class="nav-link" href="calendar.html"><i class="fe fe-calendar fe-16"></i><span class="ml-3 item-text">Calendar</span></a></li>
+                <li class="nav-item dropdown"><a href="#contact" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-book fe-16"></i><span class="ml-3 item-text">Contacts</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="contact">
+                        <a class="nav-link pl-3" href="./contacts-list.html"><span class="ml-1">Contact List</span></a>
+                        <a class="nav-link pl-3" href="./contacts-grid.html"><span class="ml-1">Contact Grid</span></a>
+                        <a class="nav-link pl-3" href="./contacts-new.html"><span class="ml-1">New Contact</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#profile" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-user fe-16"></i><span class="ml-3 item-text">Profile</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="profile">
+                        <a class="nav-link pl-3" href="./profile.html"><span class="ml-1">Overview</span></a>
+                        <a class="nav-link pl-3" href="./profile-settings.html"><span class="ml-1">Settings</span></a>
+                        <a class="nav-link pl-3" href="./profile-security.html"><span class="ml-1">Security</span></a>
+                        <a class="nav-link pl-3" href="./profile-notification.html"><span class="ml-1">Notifications</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#fileman" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-folder fe-16"></i><span class="ml-3 item-text">File Manager</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="fileman">
+                        <a class="nav-link pl-3" href="./files-list.html"><span class="ml-1">Files List</span></a>
+                        <a class="nav-link pl-3" href="./files-grid.html"><span class="ml-1">Files Grid</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#support" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-compass fe-16"></i><span class="ml-3 item-text">Help Desk</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="support">
+                        <a class="nav-link pl-3" href="./support-center.html"><span class="ml-1">Home</span></a>
+                        <a class="nav-link pl-3" href="./support-tickets.html"><span class="ml-1">Tickets</span></a>
+                        <a class="nav-link pl-3" href="./support-ticket-detail.html"><span class="ml-1">Ticket Detail</span></a>
+                        <a class="nav-link pl-3" href="./support-faqs.html"><span class="ml-1">FAQs</span></a>
+                    </ul>
+                </li>
+            </ul>
+            <p class="text-muted nav-heading mt-4 mb-1"><span>Extra</span></p>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item dropdown"><a href="#pages" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-file fe-16"></i><span class="ml-3 item-text">Pages</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="pages">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-orders.html"><span class="ml-1 item-text">Orders</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-timeline.html"><span class="ml-1 item-text">Timeline</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-invoice.html"><span class="ml-1 item-text">Invoice</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-404.html"><span class="ml-1 item-text">Page 404</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-500.html"><span class="ml-1 item-text">Page 500</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./page-blank.html"><span class="ml-1 item-text">Blank</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#auth" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-shield fe-16"></i><span class="ml-3 item-text">Authentication</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="auth">
+                        <a class="nav-link pl-3" href="./auth-login.html"><span class="ml-1">Login 1</span></a>
+                        <a class="nav-link pl-3" href="./auth-login-half.html"><span class="ml-1">Login 2</span></a>
+                        <a class="nav-link pl-3" href="./auth-register.html"><span class="ml-1">Register</span></a>
+                        <a class="nav-link pl-3" href="./auth-resetpw.html"><span class="ml-1">Reset Password</span></a>
+                        <a class="nav-link pl-3" href="./auth-confirm.html"><span class="ml-1">Confirm Password</span></a>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown"><a href="#layouts" data-toggle="collapse" class="dropdown-toggle nav-link"><i class="fe fe-layout fe-16"></i><span class="ml-3 item-text">Layout</span></a>
+                    <ul class="collapse list-unstyled pl-4 w-100" id="layouts">
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index-horizontal.html"><span class="ml-1 item-text">Top Navigation</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./index-boxed.html"><span class="ml-1 item-text">Boxed</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <!-- MAIN CONTENT - KATALOG ONLINE -->
+    <main role="main" class="main-content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="row align-items-center my-4">
+                        <div class="col">
+                            <h2 class="mb-0">Katalog Barang Online</h2>
+                            <p class="text-muted">Kelola daftar produk referensi dari supplier/marketplace</p>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-add" data-toggle="modal" data-target="#modalTambahKatalog">
+                                <i class="fe fe-plus fe-12 mr-2"></i>Tambah Produk
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Statistics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <div class="stat-number" id="totalKatalogCount">0</div>
+                                <div class="stat-label">Total Produk</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <div class="stat-number" id="aktifCount">0</div>
+                                <div class="stat-label">Aktif</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <div class="stat-number" id="nonaktifCount">0</div>
+                                <div class="stat-label">Nonaktif</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Table -->
+                    <div class="card shadow-sm">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Gambar</th>
+                                            <th>Kode</th>
+                                            <th>Nama Produk</th>
+                                            <th>Kategori</th>
+                                            <th>Harga</th>
+                                            <th>Supplier</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="katalogTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- MODAL TAMBAH KATALOG -->
+    <div class="modal fade" id="modalTambahKatalog" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+                    <h5 class="modal-title text-white">Tambah Produk ke Katalog Online</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTambahKatalog">
+                        <div class="row">
+                            <div class="col-md-6"><div class="form-group"><label>Kode Produk</label><input type="text" class="form-control" id="katalogKode" placeholder="Contoh: ONL-XXX"></div></div>
+                            <div class="col-md-6"><div class="form-group"><label>Nama Produk</label><input type="text" class="form-control" id="katalogNama" placeholder="Nama produk"></div></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6"><div class="form-group"><label>Kategori</label><select class="form-control" id="katalogKategori"><option>Elektronik</option><option>Aksesoris</option><option>Komputer</option><option>Storage</option><option>Audio</option></select></div></div>
+                            <div class="col-md-6"><div class="form-group"><label>Supplier</label><input type="text" class="form-control" id="katalogSupplier" placeholder="Nama supplier"></div></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6"><div class="form-group"><label>Harga</label><input type="text" class="form-control" id="katalogHarga" placeholder="Rp"></div></div>
+                            <div class="col-md-6"><div class="form-group"><label>Stok Rekomendasi</label><input type="number" class="form-control" id="katalogStok" value="10" min="1"></div></div>
+                        </div>
+                        <div class="form-group"><label>Deskripsi</label><textarea class="form-control" rows="2" id="katalogDeskripsi" placeholder="Deskripsi produk"></textarea></div>
+                        <div class="form-group"><label>Link Gambar (URL)</label><input type="text" class="form-control" id="katalogGambar" placeholder="https://..."></div></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="simpanKatalogBtn">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODAL EDIT KATALOG -->
+    <div class="modal fade" id="modalEditKatalog" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+                    <h5 class="modal-title text-white">Edit Produk Katalog</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditKatalog">
+                        <input type="hidden" id="editKatalogId">
+                        <div class="row">
+                            <div class="col-md-6"><div class="form-group"><label>Kode Produk</label><input type="text" class="form-control" id="editKode"></div></div>
+                            <div class="col-md-6"><div class="form-group"><label>Nama Produk</label><input type="text" class="form-control" id="editNama"></div></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6"><div class="form-group"><label>Kategori</label><select class="form-control" id="editKategori"><option>Elektronik</option><option>Aksesoris</option><option>Komputer</option><option>Storage</option><option>Audio</option></select></div></div>
+                            <div class="col-md-6"><div class="form-group"><label>Supplier</label><input type="text" class="form-control" id="editSupplier"></div></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6"><div class="form-group"><label>Harga</label><input type="text" class="form-control" id="editHarga" placeholder="Rp"></div></div>
+                            <div class="col-md-6"><div class="form-group"><label>Stok Rekomendasi</label><input type="number" class="form-control" id="editStok"></div></div>
+                        </div>
+                        <div class="form-group"><label>Deskripsi</label><textarea class="form-control" rows="2" id="editDeskripsi"></textarea></div>
+                        <div class="form-group"><label>Status</label><select class="form-control" id="editStatus"><option value="aktif">Aktif</option><option value="nonaktif">Nonaktif</option></select></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="updateKatalogBtn">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODAL HAPUS -->
+    <div class="modal fade" id="modalHapusKatalog" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title text-white">Konfirmasi Hapus</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <i class="fe fe-alert-triangle" style="font-size: 48px; color: #f44336;"></i>
+                    <h5 class="mt-3">Yakin ingin menghapus?</h5>
+                    <p class="text-muted mb-0" id="hapusKatalogNama"></p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button class="btn btn-danger" id="konfirmasiHapusKatalogBtn">Ya, Hapus!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/simplebar.min.js"></script>
+    <script src="js/apps.js"></script>
+    
+    <script>
+    $(document).ready(function() {
+        // Ambil data dari localStorage (katalog online)
+        let katalogList = JSON.parse(localStorage.getItem('katalogOnlineList') || '[]');
+        
+        // Data dummy jika kosong
+        if (katalogList.length === 0) {
+            katalogList = [
+                { id: 1, kode: "ONL-MN24", nama: "Monitor Gaming 24\"", kategori: "Elektronik", harga: 1850000, stokRekomendasi: 10, supplier: "LG Official", deskripsi: "Monitor gaming 24 inch 144Hz", status: "aktif", imageIcon: "fe-monitor" },
+                { id: 2, kode: "ONL-SSD1", nama: "SSD NVMe 1TB", kategori: "Storage", harga: 1250000, stokRekomendasi: 20, supplier: "Samsung Store", deskripsi: "SSD NVMe Gen4 1TB", status: "aktif", imageIcon: "fe-hard-drive" },
+                { id: 3, kode: "ONL-HS550", nama: "Headset Wireless", kategori: "Aksesoris", harga: 550000, stokRekomendasi: 15, supplier: "Razer Official", deskripsi: "Headset gaming wireless 7.1", status: "aktif", imageIcon: "fe-headphones" },
+                { id: 4, kode: "ONL-I7", nama: "Prosesor Intel i7", kategori: "Komputer", harga: 4200000, stokRekomendasi: 5, supplier: "Intel Authorized", deskripsi: "Intel Core i7-13700K", status: "aktif", imageIcon: "fe-cpu" }
+            ];
+            localStorage.setItem('katalogOnlineList', JSON.stringify(katalogList));
+        }
+        
+        function simpanKatalog() {
+            localStorage.setItem('katalogOnlineList', JSON.stringify(katalogList));
+            renderKatalogTable();
+            updateStatistics();
+        }
+        
+        function renderKatalogTable() {
+            let html = '';
+            katalogList.forEach((item, idx) => {
+                let statusBadge = item.status === 'aktif' 
+                    ? '<span class="badge badge-success" style="background:#28a745;">Aktif</span>'
+                    : '<span class="badge badge-secondary" style="background:#6c757d;">Nonaktif</span>';
+                html += `<tr>
+                            <td>${idx + 1}</td>
+                            <td><div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;"><i class="fe ${item.imageIcon || 'fe-box'}"></i></div></td>
+                            <td>${item.kode}</td>
+                            <td>${item.nama}</td>
+                            <td>${item.kategori}</td>
+                            <td>Rp ${item.harga.toLocaleString('id-ID')}</td>
+                            <td>${item.supplier}</td>
+                            <td>${statusBadge}</td>
+                            <td>
+                                <button class="btn btn-edit btn-sm btn-edit-katalog" data-idx="${idx}">Edit</button>
+                                <button class="btn btn-delete btn-sm btn-delete-katalog" data-idx="${idx}">Hapus</button>
+                            </td>
+                          </tr>`;
+            });
+            $('#katalogTableBody').html(html || '<tr><td colspan="9" class="text-center">Belum ada produk</td></tr>');
+            updateStatistics();
+        }
+        
+        function updateStatistics() {
+            let total = katalogList.length;
+            let aktif = katalogList.filter(item => item.status === 'aktif').length;
+            let nonaktif = katalogList.filter(item => item.status === 'nonaktif').length;
+            $('#totalKatalogCount').text(total);
+            $('#aktifCount').text(aktif);
+            $('#nonaktifCount').text(nonaktif);
+        }
+        
+        // Tambah katalog
+        $('#simpanKatalogBtn').click(function() {
+            let newId = katalogList.length > 0 ? Math.max(...katalogList.map(i => i.id)) + 1 : 1;
+            let newItem = {
+                id: newId,
+                kode: $('#katalogKode').val(),
+                nama: $('#katalogNama').val(),
+                kategori: $('#katalogKategori').val(),
+                harga: parseInt($('#katalogHarga').val().replace(/[^0-9]/g, '')) || 0,
+                stokRekomendasi: parseInt($('#katalogStok').val()) || 10,
+                supplier: $('#katalogSupplier').val(),
+                deskripsi: $('#katalogDeskripsi').val(),
+                status: "aktif",
+                imageIcon: "fe-box"
+            };
+            if(!newItem.kode || !newItem.nama) { alert("Lengkapi kode dan nama produk!"); return; }
+            katalogList.push(newItem);
+            simpanKatalog();
+            $('#modalTambahKatalog').modal('hide');
+            $('#formTambahKatalog')[0].reset();
+            alert(`✅ Produk "${newItem.nama}" berhasil ditambahkan ke katalog online!`);
+        });
+        
+        // Edit katalog
+        $(document).on('click', '.btn-edit-katalog', function() {
+            let idx = $(this).data('idx');
+            let item = katalogList[idx];
+            $('#editKatalogId').val(idx);
+            $('#editKode').val(item.kode);
+            $('#editNama').val(item.nama);
+            $('#editKategori').val(item.kategori);
+            $('#editSupplier').val(item.supplier);
+            $('#editHarga').val('Rp ' + item.harga.toLocaleString('id-ID'));
+            $('#editStok').val(item.stokRekomendasi);
+            $('#editDeskripsi').val(item.deskripsi || '');
+            $('#editStatus').val(item.status);
+            $('#modalEditKatalog').modal('show');
+        });
+        
+        $('#updateKatalogBtn').click(function() {
+            let idx = parseInt($('#editKatalogId').val());
+            katalogList[idx] = {
+                ...katalogList[idx],
+                kode: $('#editKode').val(),
+                nama: $('#editNama').val(),
+                kategori: $('#editKategori').val(),
+                supplier: $('#editSupplier').val(),
+                harga: parseInt($('#editHarga').val().replace(/[^0-9]/g, '')) || 0,
+                stokRekomendasi: parseInt($('#editStok').val()) || 0,
+                deskripsi: $('#editDeskripsi').val(),
+                status: $('#editStatus').val()
+            };
+            simpanKatalog();
+            $('#modalEditKatalog').modal('hide');
+            alert("Produk berhasil diupdate!");
+        });
+        
+        // Hapus katalog
+        let hapusKatalogIdx = null;
+        $(document).on('click', '.btn-delete-katalog', function() {
+            hapusKatalogIdx = $(this).data('idx');
+            let item = katalogList[hapusKatalogIdx];
+            $('#hapusKatalogNama').html(`<strong>${item.nama}</strong><br>(${item.kode})`);
+            $('#modalHapusKatalog').modal('show');
+        });
+        
+        $('#konfirmasiHapusKatalogBtn').click(function() {
+            if(hapusKatalogIdx !== null) {
+                katalogList.splice(hapusKatalogIdx, 1);
+                simpanKatalog();
+                $('#modalHapusKatalog').modal('hide');
+                alert("Produk berhasil dihapus!");
+                hapusKatalogIdx = null;
+            }
+        });
+        
+        renderKatalogTable();
+    });
+    </script>
+</body>
+</html>

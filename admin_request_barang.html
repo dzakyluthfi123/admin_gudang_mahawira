@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin - Request & RAB Barang | Mahawira</title>
+    <link rel="stylesheet" href="css/simplebar.css">
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/feather.css">
+    <link rel="stylesheet" href="css/select2.css">
+    <link rel="stylesheet" href="css/dropzone.css">
+    <link rel="stylesheet" href="css/uppy.min.css">
+    <link rel="stylesheet" href="css/jquery.steps.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/quill.snow.css">
+    <link rel="stylesheet" href="css/daterangepicker.css">
+    <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
+    <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
+    
+    <style>
+        .main-content { background: #f8f9fc; }
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            height: 100%;
+        }
+        .stat-card:hover { transform: translateY(-3px); }
+        .stat-number { font-size: 28px; font-weight: 700; color: #1e3c72; }
+        .stat-label { font-size: 13px; color: #6c757d; margin-top: 5px; }
+        
+        .badge-pending { background: #ff9800; color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; }
+        .badge-approved { background: #4caf50; color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; }
+        .btn-approve { background: #28a745; border: none; padding: 4px 12px; border-radius: 6px; color: white; font-size: 12px; }
+        .btn-reject { background: #dc3545; border: none; padding: 4px 12px; border-radius: 6px; color: white; font-size: 12px; }
+        .btn-view { background: #2196f3; border: none; padding: 4px 12px; border-radius: 6px; color: white; font-size: 12px; }
+        .btn-convert { background: #6f42c1; border: none; padding: 4px 12px; border-radius: 6px; color: white; font-size: 12px; }
+        .filter-tabs { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+        .filter-tab { padding: 6px 18px; border-radius: 30px; background: white; border: 1px solid #e2e8f0; font-size: 13px; cursor: pointer; }
+        .filter-tab.active { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; border-color: transparent; }
+        @media (max-width: 768px) { .table-responsive { overflow-x: auto; } }
+    </style>
+</head>
+<body class="vertical light">
+<div class="wrapper">
+    <nav class="topnav navbar navbar-light bg-white">
+        <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar"><i class="fe fe-menu"></i></button>
+        <a class="navbar-brand mx-auto" href="#">Admin - Request & RAB Barang</a>
+        <ul class="nav"><li class="nav-item"><a class="nav-link text-muted my-2" href="data_barang.html"><i class="fe fe-box fe-16"></i></a></li></ul>
+    </nav>
+    
+    <aside class="sidebar-left border-right bg-white shadow" id="leftSidebar" data-simplebar>
+        <a href="#" class="btn collapseSidebar toggle-btn d-lg-none text-muted ml-2 mt-3"><i class="fe fe-x"></i></a>
+        <nav class="vertnav navbar navbar-light">
+            <div class="w-100 mb-4 d-flex"><a class="navbar-brand mx-auto" href="./index.html"><img id="logo" src="assets/images/logo_mahawira.png" alt="Logo"></a></div>
+            <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item"><a class="nav-link" href="data_barang.html"><i class="fe fe-box fe-16"></i><span class="ml-3">Data Barang</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="pengajuan_pembelian.html"><i class="fe fe-shopping-cart fe-16"></i><span class="ml-3">Pengajuan Pembelian</span></a></li>
+                <li class="nav-item active"><a class="nav-link" href="admin_request_barang.html"><i class="fe fe-file-text fe-16"></i><span class="ml-3">Request & RAB</span></a></li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <main role="main" class="main-content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="row my-4"><div class="col"><h2>Request & RAB Barang</h2><p class="text-muted">Kelola request dari NOC dan konversi ke data barang</p></div></div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3"><div class="stat-card"><div><div class="stat-number" id="totalRequest">0</div><div class="stat-label">Total Request</div></div></div></div>
+                        <div class="col-md-4 mb-3"><div class="stat-card"><div><div class="stat-number" id="totalRAB">0</div><div class="stat-label">Total RAB</div></div></div></div>
+                        <div class="col-md-4 mb-3"><div class="stat-card"><div><div class="stat-number" id="pendingCount">0</div><div class="stat-label">Menunggu Proses</div></div></div></div>
+                    </div>
+                    
+                    <ul class="nav nav-tabs mb-3">
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#requestTab">📋 Request Barang</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#rabTab">📊 RAB Pengajuan</a></li>
+                    </ul>
+                    
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="requestTab">
+                            <div class="card shadow-sm"><div class="card-body p-0"><div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead><tr><th>No</th><th>Tanggal</th><th>ID Request</th><th>Item</th><th>Total Estimasi</th><th>Status</th><th>Aksi</th></tr></thead>
+                                    <tbody id="requestTable"></tbody>
+                                </table>
+                            </div></div></div>
+                        </div>
+                        <div class="tab-pane fade" id="rabTab">
+                            <div class="filter-tabs"><div class="filter-tab active" data-filter="all">Semua</div><div class="filter-tab" data-filter="menunggu">Menunggu</div></div>
+                            <div class="card shadow-sm"><div class="card-body p-0"><div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead><tr><th>No</th><th>Tanggal</th><th>Barang</th><th>Jumlah</th><th>Total</th><th>Prioritas</th><th>Status</th><th>Aksi</th></tr></thead>
+                                    <tbody id="rabTable"></tbody>
+                                </table>
+                            </div></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal Detail Request -->
+<div class="modal fade" id="modalDetailRequest" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content">
+    <div class="modal-header bg-primary text-white"><h5>Detail Request Barang</h5><button class="close text-white" data-dismiss="modal">&times;</button></div>
+    <div class="modal-body" id="detailRequestContent"></div>
+    <div class="modal-footer"><button class="btn btn-secondary" data-dismiss="modal">Tutup</button></div>
+</div></div></div>
+
+<!-- Modal Konversi ke Data Barang -->
+<div class="modal fade" id="modalKonversi" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content">
+    <div class="modal-header" style="background: linear-gradient(135deg, #6f42c1, #5538a8);"><h5 class="text-white">Konversi Request ke Data Barang</h5><button class="close text-white" data-dismiss="modal">&times;</button></div>
+    <div class="modal-body">
+        <div class="alert alert-info"><i class="fe fe-info"></i> Request akan dikonversi menjadi data barang di gudang.</div>
+        <form id="formKonversi">
+            <input type="hidden" id="konversiRequestId">
+            <div class="row">
+                <div class="col-md-6"><div class="form-group"><label>Kode Barang</label><input type="text" class="form-control" id="konversiKode"></div></div>
+                <div class="col-md-6"><div class="form-group"><label>Supplier</label><input type="text" class="form-control" id="konversiSupplier"></div></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><div class="form-group"><label>Harga Beli</label><input type="text" class="form-control" id="konversiHargaBeli" placeholder="Rp"></div></div>
+                <div class="col-md-6"><div class="form-group"><label>Lokasi Rak</label><input type="text" class="form-control" id="konversiLokasiRak" placeholder="Rak - Baris - Kolom"></div></div>
+            </div>
+            <div class="form-group"><label>Deskripsi</label><textarea class="form-control" rows="2" id="konversiDeskripsi"></textarea></div>
+        </form>
+    </div>
+    <div class="modal-footer"><button class="btn btn-secondary" data-dismiss="modal">Batal</button><button class="btn btn-convert" id="simpanKonversiBtn">Konversi ke Data Barang</button></div>
+</div></div></div>
+
+<!-- Modal Detail RAB & Approve -->
+<div class="modal fade" id="modalDetailRAB" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content">
+    <div class="modal-header" style="background: linear-gradient(135deg, #dc3545, #c82333);"><h5 class="text-white">Detail RAB Pengajuan</h5><button class="close text-white" data-dismiss="modal">&times;</button></div>
+    <div class="modal-body" id="detailRABContent"></div>
+    <div class="modal-footer">
+        <button class="btn btn-success" id="approveRABBtn">Setujui RAB</button>
+        <button class="btn btn-danger" id="rejectRABBtn">Tolak RAB</button>
+        <button class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+    </div>
+</div></div></div>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/simplebar.min.js"></script>
+<script src="js/apps.js"></script>
+
+<script>
+$(document).ready(function() {
+    let requestList = JSON.parse(localStorage.getItem('requestList') || '[]');
+    let rabList = JSON.parse(localStorage.getItem('rabList') || '[]');
+    let gudangItems = JSON.parse(localStorage.getItem('gudangItems') || '[]');
+    let currentRABId = null;
+    
+    function updateStats() {
+        $('#totalRequest').text(requestList.length);
+        $('#totalRAB').text(rabList.length);
+        $('#pendingCount').text(requestList.filter(r => r.status === 'menunggu').length + rabList.filter(r => r.status === 'menunggu').length);
+    }
+    
+    function renderRequestTable() {
+        let html = '';
+        requestList.forEach((req, idx) => {
+            let statusBadge = req.status === 'menunggu' ? '<span class="badge-pending">Menunggu</span>' : '<span class="badge-approved">Diproses</span>';
+            html += `<tr>
+                        <td>${idx+1}</td><td><small>${req.tanggal}</small></td><td>${req.id}</td>
+                        <td>${req.items.length} item (${req.totalItem} pcs)</td>
+                        <td>Rp ${req.totalEstimasi.toLocaleString('id-ID')}</td>
+                        <td>${statusBadge}</td>
+                        <td><button class="btn-view btn-sm btn-detail-request" data-idx="${idx}">Detail</button>
+                            ${req.status === 'menunggu' ? `<button class="btn-convert btn-sm ms-1 btn-konversi" data-idx="${idx}">Konversi</button>` : ''}</td>
+                     </tr>`;
+        });
+        $('#requestTable').html(html || '<tr><td colspan="7" class="text-center">Belum ada request</td></tr>');
+        updateStats();
+    }
+    
+    function renderRABTable(filter = 'all') {
+        let filtered = filter === 'all' ? rabList : rabList.filter(r => r.status === filter);
+        let html = '';
+        filtered.forEach((rab, idx) => {
+            let statusBadge = rab.status === 'menunggu' ? '<span class="badge-pending">Menunggu</span>' : (rab.status === 'disetujui' ? '<span class="badge-approved">Disetujui</span>' : '<span class="badge-pending">Ditolak</span>');
+            html += `<tr>
+                        <td>${idx+1}</td><td><small>${rab.tanggal}</small></td><td>${rab.namaBarang}</td>
+                        <td>${rab.jumlah} ${rab.satuan || 'Pcs'}</td><td>Rp ${rab.total.toLocaleString('id-ID')}</td>
+                        <td>${rab.prioritas}</td><td>${statusBadge}</td>
+                        <td><button class="btn-view btn-sm btn-detail-rab" data-idx="${idx}">Detail</button></td>
+                     </tr>`;
+        });
+        $('#rabTable').html(html || '<tr><td colspan="8" class="text-center">Belum ada RAB</td></tr>');
+        updateStats();
+    }
+    
+    $(document).on('click', '.btn-detail-request', function() {
+        let req = requestList[$(this).data('idx')];
+        let itemsHtml = '<div class="rab-summary"><h6>Daftar Barang:</h6>';
+        req.items.forEach(item => { itemsHtml += `<div class="d-flex justify-content-between py-1"><span>${item.nama} (${item.kode})</span><span>${item.jumlah} x Rp ${item.hargaJual.toLocaleString()}</span></div>`; });
+        itemsHtml += `<hr><div class="fw-bold d-flex justify-content-between"><span>Total Estimasi</span><span>Rp ${req.totalEstimasi.toLocaleString('id-ID')}</span></div></div>`;
+        $('#detailRequestContent').html(`<div class="row mb-2"><div class="col-4 text-muted">ID Request</div><div class="col-8 fw-bold">${req.id}</div></div>
+            <div class="row mb-2"><div class="col-4 text-muted">Tanggal</div><div class="col-8">${req.tanggal}</div></div>
+            <div class="row mb-2"><div class="col-4 text-muted">Diajukan Oleh</div><div class="col-8">${req.diajukanOleh || 'NOC'}</div></div>${itemsHtml}`);
+        $('#modalDetailRequest').modal('show');
+    });
+    
+    $(document).on('click', '.btn-konversi', function() {
+        let idx = $(this).data('idx');
+        let req = requestList[idx];
+        $('#konversiRequestId').val(idx);
+        $('#konversiKode').val(req.items[0]?.kode || 'BRG-NEW');
+        $('#konversiSupplier').val('');
+        $('#konversiHargaBeli').val('');
+        $('#konversiLokasiRak').val('');
+        $('#konversiDeskripsi').val('');
+        $('#modalKonversi').modal('show');
+    });
+    
+    $('#simpanKonversiBtn').click(function() {
+        let idx = parseInt($('#konversiRequestId').val());
+        let req = requestList[idx];
+        if (!req) return;
+        let today = new Date().toISOString().split('T')[0];
+        req.items.forEach(item => {
+            let newBarang = {
+                kode: $('#konversiKode').val() || item.kode,
+                nama: item.nama,
+                kategori: '-',
+                hargaBeli: parseInt($('#konversiHargaBeli').val().replace(/[^0-9]/g,'')) || 0,
+                hargaJual: item.hargaJual,
+                stok: item.jumlah,
+                satuan: item.satuan,
+                supplier: $('#konversiSupplier').val() || '-',
+                lokasiRak: $('#konversiLokasiRak').val() || '-',
+                deskripsi: $('#konversiDeskripsi').val() || `Dari request NOC: ${req.id}`,
+                jenis: "baru",
+                tanggalMasuk: today
+            };
+            gudangItems.push(newBarang);
+        });
+        localStorage.setItem('gudangItems', JSON.stringify(gudangItems));
+        requestList[idx].status = 'disetujui';
+        localStorage.setItem('requestList', JSON.stringify(requestList));
+        renderRequestTable();
+        $('#modalKonversi').modal('hide');
+        alert('✅ Request berhasil dikonversi ke data barang!');
+    });
+    
+    $(document).on('click', '.btn-detail-rab', function() {
+        currentRABId = $(this).data('idx');
+        let rab = rabList[currentRABId];
+        $('#detailRABContent').html(`
+            <div class="row mb-2"><div class="col-4 text-muted">ID RAB</div><div class="col-8 fw-bold">${rab.id}</div></div>
+            <div class="row mb-2"><div class="col-4 text-muted">Tanggal</div><div class="col-8">${rab.tanggal}</div></div>
+            <div class="row mb-2"><div class="col-4 text-muted">Kode Barang</div><div class="col-8">${rab.kodeBarang}</div></div>
+            <div class="row mb-2"><div class="col-4 text-muted">Nama Barang</div><div class="col-8">${rab.namaBarang}</div></div>
+            <div class="row mb-2"><div class="col-4 text-muted">Jumlah</div><div class="col-8">${rab.jumlah} ${rab.satuan || 'Pcs'}</div></div>
+            <div class="row mb-2"><div class="col-4 text-muted">Total</div><div class="col-8 fw-bold text-success">Rp ${rab.total.toLocaleString('id-ID')}</div></div>
+            <div class="row mb-2"><div class="col-4 text-muted">Prioritas</div><div class="col-8">${rab.prioritas}</div></div>
+            <div class="row mb-2"><div class="col-4 text-muted">Alasan</div><div class="col-8">${rab.alasan || '-'}</div></div>
+            <div class="row mb-2"><div class="col-4 text-muted">Supplier Rekomendasi</div><div class="col-8">${rab.supplierRekomendasi || '-'}</div></div>`);
+        $('#modalDetailRAB').modal('show');
+    });
+    
+    $('#approveRABBtn').click(function() {
+        if (currentRABId !== null && rabList[currentRABId]) {
+            rabList[currentRABId].status = 'disetujui';
+            localStorage.setItem('rabList', JSON.stringify(rabList));
+            renderRABTable($('.filter-tab.active').data('filter'));
+            $('#modalDetailRAB').modal('hide');
+            alert('RAB disetujui!');
+        }
+    });
+    
+    $('#rejectRABBtn').click(function() {
+        if (currentRABId !== null && rabList[currentRABId]) {
+            rabList[currentRABId].status = 'ditolak';
+            localStorage.setItem('rabList', JSON.stringify(rabList));
+            renderRABTable($('.filter-tab.active').data('filter'));
+            $('#modalDetailRAB').modal('hide');
+            alert('RAB ditolak!');
+        }
+    });
+    
+    $('.filter-tab').click(function() {
+        $('.filter-tab').removeClass('active');
+        $(this).addClass('active');
+        renderRABTable($(this).data('filter'));
+    });
+    
+    renderRequestTable();
+    renderRABTable();
+});
+</script>
+</body>
+</html>

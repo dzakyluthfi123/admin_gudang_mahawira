@@ -108,42 +108,10 @@
         .stat-number { font-size: 28px; font-weight: 700; color: #1e3c72; line-height: 1.2; }
         .stat-label { font-size: 13px; color: #6c757d; margin-top: 5px; }
         
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            margin-top: 10px;
-        }
-        .section-header-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        .section-header-icon.lama { background: rgba(108,117,125,0.15); color: #6c757d; }
-        .section-header-icon.baru { background: rgba(40,167,69,0.15); color: #28a745; }
-        .section-header h4 { margin: 0; color: #1e3c72; font-weight: 600; }
-        .section-header p { margin: 0; color: #6c757d; font-size: 13px; }
-        
-        .modal .nav-tabs .nav-link { color: #1e3c72; font-weight: 500; border: none; border-bottom: 2px solid transparent; padding: 10px 16px; }
-        .modal .nav-tabs .nav-link.active { color: #2a5298; border-bottom: 2px solid #2a5298; background: transparent; }
-        .modal .tab-pane { padding: 16px 8px 8px 8px; }
-        
-        .list-barang-item { border-left: 3px solid #2a5298; background: #f9fafc; margin-bottom: 12px; border-radius: 8px; padding: 12px; }
-        .list-barang-item:hover { background: #f1f5f9; transform: translateX(4px); }
-        
-        .katalog-card { border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; background: white; transition: all 0.2s; height: 100%; }
-        .katalog-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.08); transform: translateY(-2px); }
-        .katalog-img-placeholder { background: linear-gradient(145deg, #e9ecef, #dee2e6); height: 100px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; color: #6c757d; font-size: 28px; }
+        .modal .form-group { margin-bottom: 15px; }
+        .modal .form-group label { font-weight: 500; color: #1e3c72; margin-bottom: 5px; }
         
         .badge-stok-mini { font-size: 11px; background: #e9ecef; padding: 2px 8px; border-radius: 20px; }
-        .btn-sm-icon { padding: 2px 10px; font-size: 12px; }
-        .section-title-modal { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: #1e3c72; border-left: 4px solid #2a5298; padding-left: 12px; }
-        .list-barang-scroll { max-height: 350px; overflow-y: auto; padding-right: 5px; }
         
         .badge-role-admin { background: #1e3c72; color: white; padding: 2px 8px; border-radius: 20px; font-size: 10px; }
         .badge-role-teknis { background: #ff9800; color: white; padding: 2px 8px; border-radius: 20px; font-size: 10px; }
@@ -161,8 +129,6 @@
         
         @media (max-width: 768px) {
             .table-responsive { overflow-x: auto; }
-            .list-barang-item { flex-direction: column; align-items: flex-start !important; }
-            .list-barang-item .btn { margin-top: 8px; }
             .action-buttons { flex-direction: column; align-items: flex-start; gap: 6px; }
             .btn-edit, .btn-delete, .btn-purchase { width: 100%; text-align: center; }
             .role-radio-group { flex-direction: column; gap: 10px; }
@@ -209,10 +175,11 @@
                         <li class="nav-item active"><a class="nav-link pl-3" href="./index.html"><span class="ml-1 item-text">Default</span></a></li>
                         <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-analytics.html"><span class="ml-1 item-text">Analytics</span></a></li>
                         <li class="nav-item"><a class="nav-link pl-3" href="./data_barang.html"><span class="ml-1 item-text">Data Barang</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./list_barang.html"><span class="ml-1 item-text">List Barang</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./katalog_online.html"><span class="ml-1 item-text">Katalog Online</span></a></li>
                         <li class="nav-item"><a class="nav-link pl-3" href="./pengajuan_pembelian.html"><span class="ml-1 item-text">Pengajuan Pembelian</span></a></li>
                         <li class="nav-item"><a class="nav-link pl-3" href="./scan_barang.html"><span class="ml-1 item-text">Input & Scan Barang</span></a></li>
-                        <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-saas.html"><span class="ml-1 item-text">Saas Dashboard</span></a></li>
-                        <li class="nav-item"><a class="nav-link pl-3" href="./dashboard-system.html"><span class="ml-1 item-text">Systems</span></a></li>
+                        <li class="nav-item"><a class="nav-link pl-3" href="./noc_request_barang.html"><span class="ml-1 item-text">Request Barang</span></a></li>
                     </ul>
                 </li>
             </ul>
@@ -361,7 +328,6 @@
                                     </div>
                                     <i class="fe fe-archive fe-24 text-secondary" style="opacity: 0.5;"></i>
                                 </div>
-                                <div class="mt-2 small text-muted">Stok awal gudang</div>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -373,7 +339,6 @@
                                     </div>
                                     <i class="fe fe-plus-circle fe-24 text-success" style="opacity: 0.5;"></i>
                                 </div>
-                                <div class="mt-2 small text-muted">Tambahan terbaru</div>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -541,57 +506,106 @@
             </div>
         </div>
         
-        <!-- MODAL TAMBAH BARANG -->
+        <!-- MODAL TAMBAH BARANG (HANYA FORM, TANPA LIST BARANG & KATALOG ONLINE) -->
         <div class="modal fade" id="modalTambahBarang" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-xl">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header bg-primary" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
                         <h5 class="modal-title" style="color: white;">Tambah Barang Baru ke Gudang</h5>
                         <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <ul class="nav nav-tabs mb-3">
-                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#formBarang">📝 Form Barang</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#listBarang">📋 List Barang (Gudang)</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#katalogBarang">🛒 Katalog Barang Online</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="formBarang">
-                                <form id="formTambahBarang">
-                                    <div class="row">
-                                        <div class="col-md-6"><div class="form-group"><label>Kode Barang</label><input type="text" class="form-control" id="kodeBarang"></div></div>
-                                        <div class="col-md-6"><div class="form-group"><label>Nama Barang</label><input type="text" class="form-control" id="namaBarang"></div></div>
+                        <form id="formTambahBarang">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Kode Barang <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="kodeBarang" placeholder="Contoh: BRG-XXX">
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6"><div class="form-group"><label>Kategori</label><select class="form-control" id="kategoriBarang"><option>Elektronik</option><option>Aksesoris</option><option>Komputer</option><option>Storage</option><option>Audio</option></select></div></div>
-                                        <div class="col-md-6"><div class="form-group"><label>Satuan</label><select class="form-control" id="satuanBarang"><option>Pcs</option><option>Unit</option><option>Box</option><option>Paket</option></select></div></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nama Barang <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="namaBarang" placeholder="Nama barang">
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4"><div class="form-group"><label>Harga Beli</label><input type="text" class="form-control" id="hargaBeli"></div></div>
-                                        <div class="col-md-4"><div class="form-group"><label>Harga Jual</label><input type="text" class="form-control" id="hargaJual"></div></div>
-                                        <div class="col-md-4"><div class="form-group"><label>Stok Awal</label><input type="number" class="form-control" id="stokAwal"></div></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6"><div class="form-group"><label>Supplier</label><select class="form-control" id="supplierBarang"><option>PT Elektronik Jaya</option><option>PT Logitech Indonesia</option><option>PT Razer Indonesia</option><option>PT Samsung Electronics</option><option>PT Western Digital</option><option>PT Corsair</option><option>PT JBL Indonesia</option></select></div></div>
-                                        <div class="col-md-6"><div class="form-group"><label>Lokasi Rak</label><input type="text" class="form-control" id="lokasiRak"></div></div>
-                                    </div>
-                                    <div class="form-group"><label>Deskripsi</label><textarea class="form-control" rows="2" id="deskripsiBarang"></textarea></div>
-                                </form>
+                                </div>
                             </div>
-                            <div class="tab-pane fade" id="listBarang">
-                                <div class="section-title-modal">📦 Daftar Barang Fisik di Gudang Saat Ini</div>
-                                <div class="list-barang-scroll" id="gudangListContainer"></div>
-                                <div class="alert alert-info mt-2 small">💡 Klik tombol "Pilih Barang Ini" untuk mengisi form.</div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Kategori</label>
+                                        <select class="form-control" id="kategoriBarang">
+                                            <option>Elektronik</option>
+                                            <option>Aksesoris</option>
+                                            <option>Komputer</option>
+                                            <option>Storage</option>
+                                            <option>Audio</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Satuan</label>
+                                        <select class="form-control" id="satuanBarang">
+                                            <option>Pcs</option>
+                                            <option>Unit</option>
+                                            <option>Box</option>
+                                            <option>Paket</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="tab-pane fade" id="katalogBarang">
-                                <div class="section-title-modal">🌟 Katalog Produk Online - Supplier & Marketplace</div>
-                                <div class="row" id="katalogGrid"></div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Harga Beli</label>
+                                        <input type="text" class="form-control" id="hargaBeli" placeholder="Rp">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Harga Jual</label>
+                                        <input type="text" class="form-control" id="hargaJual" placeholder="Rp">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Stok Awal</label>
+                                        <input type="number" class="form-control" id="stokAwal" placeholder="Jumlah stok" value="0">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Supplier</label>
+                                        <select class="form-control" id="supplierBarang">
+                                            <option>PT Elektronik Jaya</option>
+                                            <option>PT Logitech Indonesia</option>
+                                            <option>PT Razer Indonesia</option>
+                                            <option>PT Samsung Electronics</option>
+                                            <option>PT Western Digital</option>
+                                            <option>PT Corsair</option>
+                                            <option>PT JBL Indonesia</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Lokasi Rak</label>
+                                        <input type="text" class="form-control" id="lokasiRak" placeholder="Rak - Baris - Kolom">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Deskripsi</label>
+                                <textarea class="form-control" rows="2" id="deskripsiBarang" placeholder="Deskripsi barang"></textarea>
+                            </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="button" class="btn btn-primary" id="simpanBarangBtn">Simpan Barang Baru</button>
+                        <button type="button" class="btn btn-primary" id="simpanBarangBtn">Simpan Barang</button>
                     </div>
                 </div>
             </div>
@@ -750,10 +764,10 @@
 
 <script>
 $(document).ready(function() {
-    // ==================== DATA DUMMY ====================
+    // ==================== DATA DARI LOCALSTORAGE ====================
     let gudangItems = JSON.parse(localStorage.getItem('gudangItems') || '[]');
     
-    // Data dummy dengan pembagian lama dan baru
+    // Data dummy dengan pembagian lama dan baru jika kosong
     if (gudangItems.length === 0) {
         let today = new Date();
         let weekAgo = new Date(today);
@@ -764,13 +778,11 @@ $(document).ready(function() {
         twoMonthsAgo.setDate(twoMonthsAgo.getDate() - 60);
         
         gudangItems = [
-            // BARANG LAMA (sudah ada dari awal)
             { kode: "BRG-001", nama: "Kabel HDMI 2m", kategori: "Aksesoris", hargaBeli: 25000, hargaJual: 35000, stok: 150, satuan: "Pcs", supplier: "PT Elektronik Jaya", lokasiRak: "A-01-01", deskripsi: "Kabel HDMI 2 meter", jenis: "lama", tanggalMasuk: twoMonthsAgo.toISOString().split('T')[0] },
             { kode: "BRG-002", nama: "Mouse Wireless Logitech", kategori: "Elektronik", hargaBeli: 120000, hargaJual: 150000, stok: 75, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "B-02-03", deskripsi: "Mouse wireless", jenis: "lama", tanggalMasuk: twoMonthsAgo.toISOString().split('T')[0] },
             { kode: "BRG-003", nama: "Keyboard Mechanical", kategori: "Elektronik", hargaBeli: 350000, hargaJual: 450000, stok: 10, satuan: "Pcs", supplier: "PT Razer Indonesia", lokasiRak: "B-02-05", deskripsi: "Keyboard mechanical RGB", jenis: "lama", tanggalMasuk: monthAgo.toISOString().split('T')[0] },
             { kode: "BRG-004", nama: "Monitor 24 Inch", kategori: "Elektronik", hargaBeli: 1200000, hargaJual: 1500000, stok: 45, satuan: "Unit", supplier: "PT Samsung Electronics", lokasiRak: "C-03-01", deskripsi: "Monitor LED", jenis: "lama", tanggalMasuk: twoMonthsAgo.toISOString().split('T')[0] },
             { kode: "BRG-005", nama: "SSD 512GB", kategori: "Storage", hargaBeli: 850000, hargaJual: 1000000, stok: 0, satuan: "Pcs", supplier: "PT Western Digital", lokasiRak: "D-04-02", deskripsi: "SSD NVMe 512GB", jenis: "lama", tanggalMasuk: monthAgo.toISOString().split('T')[0] },
-            // BARANG BARU (tambahan baru)
             { kode: "BRG-006", nama: "RAM 16GB DDR5", kategori: "Komputer", hargaBeli: 750000, hargaJual: 950000, stok: 30, satuan: "Pcs", supplier: "PT Corsair", lokasiRak: "D-04-06", deskripsi: "RAM DDR5 16GB 5200MHz", jenis: "baru", tanggalMasuk: weekAgo.toISOString().split('T')[0] },
             { kode: "BRG-007", nama: "Webcam 4K", kategori: "Aksesoris", hargaBeli: 450000, hargaJual: 650000, stok: 15, satuan: "Pcs", supplier: "PT Logitech Indonesia", lokasiRak: "A-01-10", deskripsi: "Webcam 4K Ultra HD", jenis: "baru", tanggalMasuk: weekAgo.toISOString().split('T')[0] },
             { kode: "BRG-008", nama: "Soundbar", kategori: "Audio", hargaBeli: 800000, hargaJual: 1200000, stok: 8, satuan: "Unit", supplier: "PT JBL Indonesia", lokasiRak: "E-05-03", deskripsi: "Soundbar 2.1 channel", jenis: "baru", tanggalMasuk: today.toISOString().split('T')[0] }
@@ -833,7 +845,7 @@ $(document).ready(function() {
             else if(item.stok < 15) stokBadge = `<span class="badge-stok-render">⚠ ${item.stok}</span>`;
             else stokBadge = `<span class="badge-stok">✓ ${item.stok}</span>`;
             
-            let purchaseBtn = (item.stok === 0) ? `<button class="btn btn-purchase btn-sm btn-pengadaan" data-index="${gudangItems.indexOf(item)}"><i class="fe fe-shopping-cart fe-12"></i> Ajukan</button>` : '';
+            let purchaseBtn = (item.stok === 0) ? `<button class="btn btn-purchase btn-sm btn-pengadaan" data-kode="${item.kode}"><i class="fe fe-shopping-cart fe-12"></i> Ajukan</button>` : '';
             
             if (isAll) {
                 let jenisBadge = item.jenis === 'lama' 
@@ -853,9 +865,9 @@ $(document).ready(function() {
                             <td><small>${item.tanggalMasuk || '-'}</small></td>
                             <td class="action-cell">
                                 <div class="action-buttons">
-                                    <button class="btn btn-edit btn-sm btn-edit-barang" data-index="${gudangItems.indexOf(item)}">Edit</button>
+                                    <button class="btn btn-edit btn-sm btn-edit-barang" data-kode="${item.kode}">Edit</button>
                                     ${purchaseBtn}
-                                    <button class="btn btn-delete btn-sm btn-hapus-barang" data-index="${gudangItems.indexOf(item)}">Hapus</button>
+                                    <button class="btn btn-delete btn-sm btn-hapus-barang" data-kode="${item.kode}">Hapus</button>
                                 </div>
                             </td>
                           </tr>`;
@@ -873,11 +885,11 @@ $(document).ready(function() {
                             <td><small>${item.tanggalMasuk || '-'}</small></td>
                             <td class="action-cell">
                                 <div class="action-buttons">
-                                    <button class="btn btn-edit btn-sm btn-edit-barang" data-index="${gudangItems.indexOf(item)}">Edit</button>
+                                    <button class="btn btn-edit btn-sm btn-edit-barang" data-kode="${item.kode}">Edit</button>
                                     ${purchaseBtn}
-                                    <button class="btn btn-delete btn-sm btn-hapus-barang" data-index="${gudangItems.indexOf(item)}">Hapus</button>
+                                    <button class="btn btn-delete btn-sm btn-hapus-barang" data-kode="${item.kode}">Hapus</button>
                                 </div>
-                            </td>
+                            <td>
                           </tr>`;
             }
         });
@@ -974,68 +986,7 @@ $(document).ready(function() {
         renderAllTables();
     });
     
-    // Fungsi untuk menambah barang baru (otomatis sebagai BARANG BARU)
-    function tambahBarangBaru(item) {
-        let today = new Date().toISOString().split('T')[0];
-        let newItem = {
-            ...item,
-            jenis: "baru",
-            tanggalMasuk: today
-        };
-        gudangItems.push(newItem);
-        simpanGudangItems();
-        renderAllTables();
-        loadListBarang();
-    }
-    
-    // ==================== MODAL FUNCTIONS ====================
-    const katalogOnline = [
-        { nama: "Monitor Gaming 24\"", kode: "ONL-MN24", harga: 1850000, kategori: "Elektronik", imageIcon: "fe-monitor", stokRekomendasi: 10, supplier: "LG Official" },
-        { nama: "SSD NVMe 1TB", kode: "ONL-SSD1", harga: 1250000, kategori: "Storage", imageIcon: "fe-hard-drive", stokRekomendasi: 20, supplier: "Samsung Store" },
-        { nama: "Headset Wireless", kode: "ONL-HS550", harga: 550000, kategori: "Aksesoris", imageIcon: "fe-headphones", stokRekomendasi: 15, supplier: "Razer Official" },
-        { nama: "Prosesor Intel i7", kode: "ONL-I7", harga: 4200000, kategori: "Komputer", imageIcon: "fe-cpu", stokRekomendasi: 5, supplier: "Intel Authorized" }
-    ];
-    
-    function loadListBarang() {
-        let html = '';
-        gudangItems.forEach(item => {
-            html += `<div class="list-barang-item d-flex justify-content-between align-items-center">
-                        <div><strong>${item.kode}</strong> - ${item.nama} <span class="badge-stok-mini ml-2">Stok: ${item.stok}</span><br><small class="text-muted">${item.jenis === 'lama' ? '📦 Barang Lama' : '🆕 Barang Baru'}</small></div>
-                        <button class="btn btn-sm btn-outline-primary pilihBarangGudang" data-kode="${item.kode}" data-nama="${item.nama}" data-kategori="${item.kategori}" data-hargaBeli="${item.hargaBeli}" data-satuan="${item.satuan}" data-supplier="${item.supplier}">Pilih</button>
-                    </div>`;
-        });
-        $('#gudangListContainer').html(html);
-    }
-    
-    function loadKatalogOnline() {
-        let html = '';
-        katalogOnline.forEach(prod => {
-            html += `<div class="col-md-4 mb-3"><div class="katalog-card"><div class="katalog-img-placeholder"><i class="fe ${prod.imageIcon} fe-24"></i></div><h6>${prod.nama}</h6><p class="small">Kode: ${prod.kode}</p><div class="d-flex justify-content-between"><span>Rp ${prod.harga.toLocaleString('id-ID')}</span><button class="btn btn-sm btn-success ambilProdukOnline" data-nama="${prod.nama}" data-kode="${prod.kode}" data-harga="${prod.harga}" data-kategori="${prod.kategori}" data-stok="${prod.stokRekomendasi}">Tambah</button></div></div></div>`;
-        });
-        $('#katalogGrid').html(html);
-    }
-    
-    $(document).on('click', '.pilihBarangGudang', function() {
-        $('#kodeBarang').val($(this).data('kode') + '_VAR');
-        $('#namaBarang').val($(this).data('nama') + ' (tambah)');
-        $('#kategoriBarang').val($(this).data('kategori'));
-        $('#hargaBeli').val('Rp ' + $(this).data('hargaBeli').toLocaleString());
-        $('#satuanBarang').val($(this).data('satuan'));
-        $('#supplierBarang').val($(this).data('supplier'));
-        $('#stokAwal').val(1);
-        $('.nav-tabs a:first').tab('show');
-    });
-    
-    $(document).on('click', '.ambilProdukOnline', function() {
-        $('#kodeBarang').val($(this).data('kode'));
-        $('#namaBarang').val($(this).data('nama'));
-        $('#hargaBeli').val('Rp ' + $(this).data('harga').toLocaleString());
-        $('#hargaJual').val('Rp ' + Math.floor($(this).data('harga')*1.2).toLocaleString());
-        $('#kategoriBarang').val($(this).data('kategori'));
-        $('#stokAwal').val($(this).data('stok'));
-        $('.nav-tabs a:first').tab('show');
-    });
-    
+    // Tambah Barang
     $('#simpanBarangBtn').click(function() {
         let today = new Date().toISOString().split('T')[0];
         let newItem = {
@@ -1055,28 +1006,30 @@ $(document).ready(function() {
         if(!newItem.kode || !newItem.nama) { alert("Lengkapi data!"); return; }
         gudangItems.push(newItem);
         simpanGudangItems();
-        renderAllTables();
-        loadListBarang();
         $('#modalTambahBarang').modal('hide');
         $('#formTambahBarang')[0].reset();
         alert(`✅ Barang baru "${newItem.nama}" berhasil ditambahkan! (Barang Baru)`);
     });
     
+    // Edit barang
     $(document).on('click', '.btn-edit-barang', function() {
-        let idx = $(this).data('index');
-        let item = gudangItems[idx];
-        $('#editIndex').val(idx);
-        $('#editKodeBarang').val(item.kode);
-        $('#editNamaBarang').val(item.nama);
-        $('#editKategoriBarang').val(item.kategori);
-        $('#editSatuanBarang').val(item.satuan);
-        $('#editHargaBeli').val('Rp ' + item.hargaBeli.toLocaleString());
-        $('#editHargaJual').val('Rp ' + item.hargaJual.toLocaleString());
-        $('#editStok').val(item.stok);
-        $('#editSupplierBarang').val(item.supplier);
-        $('#editLokasiRak').val(item.lokasiRak || '');
-        $('#editDeskripsi').val(item.deskripsi || '');
-        $('#modalEditBarang').modal('show');
+        let kode = $(this).data('kode');
+        let item = gudangItems.find(i => i.kode === kode);
+        let idx = gudangItems.findIndex(i => i.kode === kode);
+        if (item) {
+            $('#editIndex').val(idx);
+            $('#editKodeBarang').val(item.kode);
+            $('#editNamaBarang').val(item.nama);
+            $('#editKategoriBarang').val(item.kategori);
+            $('#editSatuanBarang').val(item.satuan);
+            $('#editHargaBeli').val('Rp ' + item.hargaBeli.toLocaleString());
+            $('#editHargaJual').val('Rp ' + item.hargaJual.toLocaleString());
+            $('#editStok').val(item.stok);
+            $('#editSupplierBarang').val(item.supplier);
+            $('#editLokasiRak').val(item.lokasiRak || '');
+            $('#editDeskripsi').val(item.deskripsi || '');
+            $('#modalEditBarang').modal('show');
+        }
     });
     
     $('#simpanEditBtn').click(function() {
@@ -1094,32 +1047,30 @@ $(document).ready(function() {
             deskripsi: $('#editDeskripsi').val()
         };
         simpanGudangItems();
-        renderAllTables();
-        loadListBarang();
         $('#modalEditBarang').modal('hide');
         alert("Barang berhasil diupdate!");
     });
     
-    let hapusIndex = null;
+    // Hapus barang
+    let hapusKode = null;
     $(document).on('click', '.btn-hapus-barang', function() {
-        hapusIndex = $(this).data('index');
-        let item = gudangItems[hapusIndex];
+        hapusKode = $(this).data('kode');
+        let item = gudangItems.find(i => i.kode === hapusKode);
         $('#hapusBarangNama').html(`<strong>${item.nama}</strong><br>(${item.kode})`);
         $('#modalHapusBarang').modal('show');
     });
     
     $('#konfirmasiHapusBtn').click(function() {
-        if(hapusIndex !== null) {
-            let row = $(`.btn-hapus-barang[data-index="${hapusIndex}"]`).closest('tr');
+        if(hapusKode !== null) {
+            let idx = gudangItems.findIndex(i => i.kode === hapusKode);
+            let row = $(`.btn-hapus-barang[data-kode="${hapusKode}"]`).closest('tr');
             row.addClass('fade-out-row');
             setTimeout(() => {
-                gudangItems.splice(hapusIndex, 1);
+                gudangItems.splice(idx, 1);
                 simpanGudangItems();
-                renderAllTables();
-                loadListBarang();
                 $('#modalHapusBarang').modal('hide');
                 alert("Barang berhasil dihapus!");
-                hapusIndex = null;
+                hapusKode = null;
             }, 400);
         }
     });
@@ -1149,20 +1100,22 @@ $(document).ready(function() {
         localStorage.setItem('pengajuanList', JSON.stringify(existing));
     }
     
-    let pengadaanIndex = null;
+    let pengadaanKode = null;
     $(document).on('click', '.btn-pengadaan', function() {
-        pengadaanIndex = $(this).data('index');
-        let item = gudangItems[pengadaanIndex];
-        $('#pengadaanKode').text(item.kode);
-        $('#pengadaanNama').text(item.nama);
-        $('#jumlahBeli').val(10);
-        $('#catatanPembelian').val('');
-        $('input[name="supplierOption"]').val(['DNSFiber Store']);
-        $('#storeLainOptions').hide();
-        $('#roleAdmin').prop('checked', true);
-        $('.role-radio').removeClass('selected');
-        $('#roleAdminBox').addClass('selected');
-        $('#modalPengadaanBarang').modal('show');
+        pengadaanKode = $(this).data('kode');
+        let item = gudangItems.find(i => i.kode === pengadaanKode);
+        if (item) {
+            $('#pengadaanKode').text(item.kode);
+            $('#pengadaanNama').text(item.nama);
+            $('#jumlahBeli').val(10);
+            $('#catatanPembelian').val('');
+            $('input[name="supplierOption"]').val(['DNSFiber Store']);
+            $('#storeLainOptions').hide();
+            $('#roleAdmin').prop('checked', true);
+            $('.role-radio').removeClass('selected');
+            $('#roleAdminBox').addClass('selected');
+            $('#modalPengadaanBarang').modal('show');
+        }
     });
     
     $('input[name="supplierOption"]').on('change', function() {
@@ -1181,7 +1134,9 @@ $(document).ready(function() {
         let catatan = $('#catatanPembelian').val() || '-';
         let rolePengaju = $('input[name="rolePengaju"]:checked').val();
         let namaPengaju = rolePengaju === 'Admin' ? 'Administrator' : 'Staff Teknis';
-        let item = gudangItems[pengadaanIndex];
+        let item = gudangItems.find(i => i.kode === pengadaanKode);
+        
+        if (!item) return;
         
         let id = 'PJ-' + new Date().getTime();
         let now = new Date();
@@ -1220,19 +1175,14 @@ $(document).ready(function() {
         }
     });
     
-    $('#modalTambahBarang').on('shown.bs.modal', function() { loadListBarang(); loadKatalogOnline(); });
-    
-    // Tab navigation with Bootstrap 5 (using data-bs-toggle)
+    // Tab navigation
     $('.nav-link[data-bs-toggle="pill"]').on('shown.bs.tab', function(e) {
-        // Re-render table saat tab berubah
         renderAllTables();
     });
     
     renderAllTables();
-    loadListBarang();
-    loadKatalogOnline();
     
-    // Fix for Bootstrap 5 compatibility
+    // Bootstrap 5 compatibility
     if (typeof bootstrap !== 'undefined') {
         var triggerTabList = [].slice.call(document.querySelectorAll('#jenisTab button'));
         triggerTabList.forEach(function(triggerEl) {
